@@ -28,7 +28,7 @@ vec3 oorb(void)
 	
 	vec2 p = 2.0 * uv - 1.0;
 	p -= vec2(0.75,-0.2);
-	p *= 1.5*(-texture2D(iChannel0,vec2(0.0,0.5)).r*10.0+1.5);
+	p *= 1.5*(-texture2D(iChannel0,vec2(0.01,0.5)).r*2.0+1.5);
 	
 	// force 1:1 aspect ratio if defined
 #ifdef FIX_ASPECT
@@ -201,7 +201,7 @@ vec3 orb(void)
 	
 	p.x *= iResolution.x/iResolution.y;
 
-	float t = iGlobalTime * 0.05+texture2D(iChannel1,vec2(0.0,0.5)).r*0.1;
+	float t = iGlobalTime * 0.05+texture2D(iChannel1,vec2(0.01,0.5)).r*0.025;
 
 	vec3 o = vec3(
 		snoise(vec3(p.xy*0.5,t)+vec3(2000.0))*5.0,
@@ -292,6 +292,6 @@ vec3 final = vec3(0.0);
 	
 	
 	c = vec4(final,1.0);
-	float rr = texture2D(iChannel0, vec2(0.0,0.5)).r-0.1;
-	c*=clamp(vec4(1.0,1.0-rr*4.0,1.0-rr*4.0,0.0),vec4(0.0),vec4(1.0));
+	float rr = texture2D(iChannel0, vec2(0.01,0.5)).r-0.5;
+	c*=clamp(vec4(1.0,1.0-rr*8.0,1.0-rr*8.0,0.0),vec4(0.1),vec4(1.0));
 }
