@@ -11,6 +11,8 @@
 #include<iostream>
 #include<fstream>
 
+#include<bass.h>
+
 renderer *core::current = 0;
 renderer *core::previous = 0;
 
@@ -38,6 +40,13 @@ static std::string wctos(JSONValue *v, const wchar_t *str){
 core::core() {
 	std::wstring conf = wgetfile("test.json");
 	JSONValue *config = JSON::Parse(conf.c_str());
+
+	if(!BASS_Init(-1,48000,BASS_DEVICE_SPEAKERS,0,0))
+	{
+		std::cerr<<"Unable to initialize sound! Maybe already initialized?"<<std::endl;
+		die();
+
+	}
 
 	title = wctos(config, L"compo");
 
@@ -111,19 +120,22 @@ std::wstring core::wgetfile(std::string path){
 void core::run(){
 	double switchTime = glfwGetTime();
 	double prevTime = switchTime;
-	
+	bool first = true;
 	while(!glfwWindowShouldClose(w)){
 		double t = glfwGetTime();
 		int ret = (*core::current)(
-			core::previous, width, height, t-switchTime, t-prevTime);
+			core::previous, width, height, t-switchTime, t-prevTime, first);
+		first = false;
 		if(ret != 0) {
 			prevTime = switchTime;
 			switchTime = glfwGetTime();
 			core::previous = core::current;
 			if(ret > 0 && core::current->next != 0) {
 				core::current = core::current->next;
+				first = true;
 			} else if(ret < 0 && core::current->prev != 0) {
 				core::current = core::current->prev;
+				first = true;
 			}
 		}
 		glfwSwapBuffers(w);

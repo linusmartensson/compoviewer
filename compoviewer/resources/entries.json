@@ -3,21 +3,21 @@
 		"artist"		: "lusius",
 		"group"			: "mental/panda design",
 		"title"			: "nerb",
-		"filename"		: "images/1.png",
+		"filename"		: "tracks/01.mp3",
 		"description"	: "sajko \nluktar \nsnopp"
 	},
 	{
 		"artist"		: "sajko",
 		"group"			: "mental",
 		"title"			: "nerb2",
-		"filename"		: "images/2.png",
+		"filename"		: "tracks/02.mp3",
 		"description"	: "we need to get ridd\nof that adhdbarn right away"
 	},
 	{
 		"artist"		: "kittyfork",
 		"group"			: "no group",
 		"title"			: "PURRFECT",
-		"filename"		: "images/3.png",
+		"filename"		: "tracks/03.mp3",
 		"description"	: "meooo meooo meoo"
 	}
 ] 

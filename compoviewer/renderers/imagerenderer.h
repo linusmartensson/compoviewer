@@ -39,7 +39,7 @@ struct imagerenderer : public transitionrenderer {
 		shaders.clear();
 		return program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("transition2.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders)));
 	}
-	int run(int width, int height, double localtime){
+	int run(int width, int height, double localtime, bool first){
 		glViewport(0, 0, width, height);
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -47,8 +47,8 @@ struct imagerenderer : public transitionrenderer {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		program::getuniform("resolution")->set((float)width, (float)height);
 
-		float tw = tex->w;
-		float th = tex->h;
+		float tw = (float)tex->w;
+		float th = (float)tex->h;
 
 		
 		//Scale largest image axis to respective window axis
@@ -76,7 +76,7 @@ struct imagerenderer : public transitionrenderer {
 		p->update();
 		arr->update();
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); 
-		return localtime>8.0?1:0;
+		return localtime>10.0?1:0;
 	}
 };
 

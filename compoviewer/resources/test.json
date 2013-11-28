@@ -4,6 +4,6 @@
 	"height"		: 720,
 	"vsync"			: true,
 	"refreshrate"	: 60,
-	"category"		: 0,
-	"compo"			: "Sexy graphics"
+	"category"		: 3,
+	"compo"			: "Hawt audio trax"
 }

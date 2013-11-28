@@ -47,7 +47,7 @@ struct itemrenderer : public transitionrenderer {
 		return program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("transition2.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders)));
 	}
 	
-	int run(int width, int height, double localtime){
+	int run(int width, int height, double localtime, bool first){
 		texttexture->bind(0, "tex");
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -78,7 +78,7 @@ struct itemrenderer : public transitionrenderer {
 		dy -= lh*1.0f;
 		sth_draw_text(c->stash, 3,100, dx,dy,title.c_str(),&dx);
 
-		dx = width*6.0/7.0;
+		dx = width*6.f/7.f;
 		sth_draw_text(c->stash, 3, 100, dx,dy,number.c_str(),&dx);
 
 		sth_vmetrics(c->stash, 3, 50, NULL, NULL, &lh);
@@ -98,12 +98,12 @@ struct itemrenderer : public transitionrenderer {
 		}
 
 		dx = sx;
-		dy = height-650-35;
+		dy = height-650.f-35.f;
 		
 		sth_draw_text(c->stash, 3,35, dx,dy,previous.c_str(),&dx);
 
 		sth_end_draw(c->stash);
 
-		return localtime>500.0?1:0;
+		return localtime>(c->category==3?60.0*10.0:5.0)?1:0;
 	}
 };

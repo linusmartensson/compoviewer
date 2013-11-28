@@ -3,6 +3,7 @@
 #include"buffers.h"
 #include"shaders.h"
 #include"renderer.h"
+#include<bass.h>
 
 struct transition {
 
@@ -13,22 +14,30 @@ struct transition {
 	varray *arr;
 	
 	transition();
-	int run(program *trans, renderer *pre, renderer *post, int width, int height, double pretime, double posttime, double transitiontime);
+	int run(program *trans, renderer *pre, renderer *post, int width, int height, double pretime, double posttime, double transitiontime, bool first);
 };
 #include<GLFW/glfw3.h>
 class transitionrenderer : public renderer {
 	transition *trans;
 	program *transprogram;
-	float length;
+	
+
+	bool play;
 protected:
 	virtual program *subinit() = 0;
-	virtual int run(int width, int height, double localtime) = 0;
+	virtual int run(int width, int height, double localtime, bool first) = 0;
 public:
+	HSTREAM audio;
+	float delay;
+	double audiolength;
+	float length;
+
+	std::string audiotrack;
 	bool dotransition;
 	transitionrenderer() : dotransition(true) {}
 	void init();
 
-	int operator()(renderer *pr, int width, int height, double localtime, double prevtime);
+	int operator()(renderer *pr, int width, int height, double localtime, double prevtime, bool first);
 	int go;
 	void key(int key,int scancode,int action,int mods){
 		if(key == GLFW_KEY_LEFT && action == GLFW_PRESS) {

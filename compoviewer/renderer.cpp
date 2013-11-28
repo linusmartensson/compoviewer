@@ -12,7 +12,7 @@ renderer* renderer::setup(core *c, renderer *next){
 	return this;
 }
 void renderer::init(){};
-int renderer::operator()(renderer*,int,int,double,double){ return 1; }
+int renderer::operator()(renderer*,int,int,double,double,bool){ return 1; }
 void renderer::key(int,int,int,int){}
 void renderer::move(double,double){}
 void renderer::scroll(double,double){}

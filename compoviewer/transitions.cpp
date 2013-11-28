@@ -1,6 +1,8 @@
 #include"transitions.h"
 
-
+#include<bass.h>
+#include<iostream>
+#include"core.h"
 static float bd[] = {	0.f,0.f,
 						0.f,1.f,
 						1.f,0.f,
@@ -39,14 +41,14 @@ transition::transition(){
 	arr->getconfig("transition_position")->set(buf, 0, 0);
 }
 
-int transition::run(program *trans, renderer *pre, renderer *post, int width, int height, double pretime, double posttime, double transitiontime){
+int transition::run(program *trans, renderer *pre, renderer *post, int width, int height, double pretime, double posttime, double transitiontime, bool first){
 		
 	if(pret->w != width || pret->h != height)
 		pret->set(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, width, height);
 	fb->set(0, pret);
 
 	framebuffer::enter(fb);
-	(*pre)(0, width, height, pretime, 0);
+	(*pre)(0, width, height, pretime, 0, false);
 	framebuffer::exit();
 		
 	if(postt->w != width || postt->h != height)
@@ -55,7 +57,7 @@ int transition::run(program *trans, renderer *pre, renderer *post, int width, in
 	fb2->set(0, postt);
 
 	framebuffer::enter(fb2);
-	int state = (*post)(0, width, height, posttime, 0);
+	int state = (*post)(0, width, height, posttime, 0, first);
 	framebuffer::exit();
 
 	pret->bind(0, "texture_pre");
@@ -80,17 +82,48 @@ void transitionrenderer::init(){
 	go = 0;
 	trans = new transition;
 	transprogram = subinit();
+	
+	
+	if(audiotrack != ""){
+		audio = BASS_StreamCreateFile(FALSE,audiotrack.c_str(),0,0,0);
+		if(!audio)
+		{
+			std::cerr<<"Missing audio file:"<<audiotrack<<std::endl;
+			core::die();
+		}
+		audiolength = BASS_ChannelBytes2Seconds(audio, BASS_ChannelGetLength(audio, BASS_POS_BYTE));
+	} else {
+		audio = 0;
+	}
 }
 
-int transitionrenderer::operator()(renderer *pr, int width, int height, double localtime, double prevtime){
-	if(go){
-		int ret = go;
-		go = 0;
-		return ret;
+int transitionrenderer::operator()(renderer *pr, int width, int height, double localtime, double prevtime, bool first){
+	
+	if(first && audio)
+		play = true;
+
+	if(play && localtime > delay){
+		BASS_ChannelPlay(audio, true);
+		play = false;
 	}
+	
+	if(audio && localtime > audiolength+delay*2.0)
+		go = 1;
+
+
+	int ret = go;
+	go = 0;
 	if(pr && localtime/length < 1.0 && dotransition){
-		return trans->run(transprogram, pr, this, width, height, prevtime, localtime, localtime/length);
+		
+		int r = trans->run(transprogram, pr, this, width, height, prevtime, localtime, localtime/length, first);
+		if(!ret) ret = r;
 	} else {
-		return run(width, height, localtime);
+		int r = run(width, height, localtime, first);
+		if(!ret) ret = r;
 	}
+
+	if(ret && audio)
+		BASS_ChannelStop(audio);
+
+	return ret;
 }
