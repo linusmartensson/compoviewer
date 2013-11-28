@@ -129,6 +129,7 @@
     <None Include="resources\item_image.vert" />
     <None Include="resources\presentation.frag" />
     <None Include="resources\presentation2.frag" />
+    <None Include="resources\audiobeamer.frag" />
     <None Include="resources\transition2.frag" />
     <None Include="resources\transition_test.frag" />
     <None Include="resources\test.frag" />

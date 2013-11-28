@@ -114,5 +114,6 @@
     <None Include="resources\presentation.frag" />
     <None Include="resources\transition2.frag" />
     <None Include="resources\presentation2.frag" />
+    <None Include="resources\audiobeamer.frag" />
   </ItemGroup>
 </Project>

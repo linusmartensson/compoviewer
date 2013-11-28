@@ -12,7 +12,7 @@ texture::texture(GLuint id) : w(-1), h(-1), id(id) {}
 void texture::bind(int slot, std::string name){
 	if(slot >= 0){
 		glActiveTexture(slot+GL_TEXTURE0);
-		program::uniforms[name]->set(slot);
+		program::getuniform(name)->set(slot);
 	}
 	glBindTexture(GL_TEXTURE_2D, id);
 }
