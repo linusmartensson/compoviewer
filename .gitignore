@@ -14,6 +14,8 @@
 
 Debug/
 Release/
+!compoviewer/deps/Debug/
+!compoviewer/deps/Release/
 *.opensdf
 *.log
 *.mp3
