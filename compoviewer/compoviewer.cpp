@@ -27,7 +27,7 @@
 #include"renderers\imagerenderer.h"
 #include"renderers\itemrenderer.h"
 
-struct renderer_start : public renderer {
+struct renderer_start : public transitionrenderer{
 	texture *texttexture;
 	program *p;
 	buffer *buf;
@@ -37,7 +37,7 @@ struct renderer_start : public renderer {
 	
 	std::string title;
 
-	void init(){
+	program* subinit(){
 		std::vector<GLuint> shaders;
 		fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("presentation.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
 
@@ -48,9 +48,10 @@ struct renderer_start : public renderer {
 		arr = new varray;
 		buf->set(VERT_COUNT*VERT_STRIDE, c->stash->verts, GL_DYNAMIC_DRAW); 
 		arr->getconfig("text_position")->set(buf, 0, 0);
-		
+		shaders.clear();
+		return program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("transition_test.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders)));
 	}
-	int operator()(renderer *pr, int width, int height, double localtime, double prevtime){
+	int run(int width, int height, double localtime){
 		glViewport(0,0, width, height);
 		glClearColor(1.0f,102/255.f,0.f,1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -77,20 +78,20 @@ struct renderer_start : public renderer {
 		};
 		program::uniforms["color"]->set(1.f,102/255.f,0.f,1.f);
 		sth_begin_draw(c->stash);
-		sth_vmetrics(c->stash, 2, 100, NULL, NULL, &lh);
-		dy -= lh*1.5f;
-		sth_draw_text(c->stash, 2,100, dx,dy,title.c_str(),&dx);
+		sth_vmetrics(c->stash, 3, 100, NULL, NULL, &lh);
+		dy = height*0.5-lh*0.5;
+		sth_draw_text(c->stash, 3,100, dx,dy,title.c_str(),&dx);
 		sth_end_draw(c->stash);
 		return localtime>5.0?1:0;
 	}
 };
-class renderer_end : public transitionrenderer {
+struct renderer_end : public transitionrenderer {
 	texture *texttexture;
 	program *p;
 	buffer *buf;
 	varray *arr;
 	float sx, sy, dx, dy, lh;
-
+	std::string title;
 	fsshader *fss;
 
 	program* subinit(){
@@ -138,9 +139,9 @@ class renderer_end : public transitionrenderer {
 		};
 		program::uniforms["color"]->set(1.f,102/255.f,0.f,1.f);
 		sth_begin_draw(c->stash);
-		sth_vmetrics(c->stash, 2, 100, NULL, NULL, &lh);
-		dy -= lh*1.5f;
-		sth_draw_text(c->stash, 2,100, dx,dy,"COMPO END :D!",&dx);
+		sth_vmetrics(c->stash, 3, 100, NULL, NULL, &lh);
+		dy = height*0.5-lh*0.5;
+		sth_draw_text(c->stash, 3,100, dx,dy,(std::string("End of ")+title).c_str(),&dx);
 		sth_end_draw(c->stash);
 
 		return localtime>5.0?1:0;
@@ -227,6 +228,8 @@ int main(int argc, char* argv[]){
 			br->setup(c, (r = ir));
 		}
 	});
-	r->setup(c,(new renderer_end)->setup(c, (new renderer_shutdown)->setup(c,0)));
+	auto e = (new renderer_end);
+	e->title = c->title;
+	r->setup(c,e->setup(c, (new renderer_shutdown)->setup(c,0)));
 	c->run();
 }

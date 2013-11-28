@@ -77,11 +77,17 @@ int transition::run(program *trans, renderer *pre, renderer *post, int width, in
 
 void transitionrenderer::init(){
 	length = 1.f;
+	go = 0;
 	trans = new transition;
 	transprogram = subinit();
 }
 
 int transitionrenderer::operator()(renderer *pr, int width, int height, double localtime, double prevtime){
+	if(go){
+		int ret = go;
+		go = 0;
+		return ret;
+	}
 	if(pr && localtime/length < 1.0 && dotransition){
 		return trans->run(transprogram, pr, this, width, height, prevtime, localtime, localtime/length);
 	} else {

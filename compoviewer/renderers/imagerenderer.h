@@ -37,7 +37,7 @@ struct imagerenderer : public transitionrenderer {
 		arr->getconfig("text_position")->set(buf, 0, 0);
 		
 		shaders.clear();
-		return program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("transition_test.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders)));
+		return program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("transition2.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders)));
 	}
 	int run(int width, int height, double localtime){
 		glViewport(0, 0, width, height);

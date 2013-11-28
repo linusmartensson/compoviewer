@@ -1,9 +1,9 @@
-{
+﻿{
 	"fullscreen"	: false,
 	"width"			: 1280,
 	"height"		: 720,
 	"vsync"			: true,
 	"refreshrate"	: 60,
 	"category"		: 0,
-	"compo"			: "Sexy Graphics"
+	"compo"			: "Sexy graphics"
 }

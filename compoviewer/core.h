@@ -22,6 +22,7 @@ public:
 
 	static void die();
 	static std::string getfile(std::string path);
+	static std::wstring wgetfile(std::string path);
 
 	core();
 	void run();

@@ -110,11 +110,9 @@
     <None Include="resources\transition_test.vert" />
     <None Include="resources\transition_test.frag" />
     <None Include="resources\item_image.vert" />
-    <None Include="resources\line.vert" />
-    <None Include="resources\line.frag" />
-    <None Include="resources\line.geom" />
     <None Include="resources\beamer.frag" />
     <None Include="resources\presentation.frag" />
     <None Include="resources\transition2.frag" />
+    <None Include="resources\presentation2.frag" />
   </ItemGroup>
 </Project>

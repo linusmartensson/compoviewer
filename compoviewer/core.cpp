@@ -36,7 +36,7 @@ static std::string wctos(JSONValue *v, const wchar_t *str){
 }
 
 core::core() {
-	std::string conf = getfile("test.json");
+	std::wstring conf = wgetfile("test.json");
 	JSONValue *config = JSON::Parse(conf.c_str());
 
 	title = wctos(config, L"compo");
@@ -89,6 +89,20 @@ std::string core::getfile(std::string path){
 	char str[8192];
 	while(ifs.getline(str, 8192)){
 		text += std::string(str)+"\n";
+	}
+	ifs.close();
+	return text;
+}
+std::wstring core::wgetfile(std::string path){
+	std::wstring text;
+	std::wifstream ifs("resources/"+path);
+	if(ifs.peek() == (wchar_t)0xEF){
+		wchar_t w;
+		ifs>>w>>w>>w;
+	}
+	wchar_t str[8192];
+	while(ifs.getline(str, 8192)){
+		text += std::wstring(str)+L"\n";
 	}
 	ifs.close();
 	return text;

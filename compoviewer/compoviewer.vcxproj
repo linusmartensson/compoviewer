@@ -127,10 +127,8 @@
     <None Include="resources\item_image.frag" />
     <None Include="resources\entries.json" />
     <None Include="resources\item_image.vert" />
-    <None Include="resources\line.frag" />
-    <None Include="resources\line.vert" />
-    <None Include="resources\line.geom" />
     <None Include="resources\presentation.frag" />
+    <None Include="resources\presentation2.frag" />
     <None Include="resources\transition2.frag" />
     <None Include="resources\transition_test.frag" />
     <None Include="resources\test.frag" />

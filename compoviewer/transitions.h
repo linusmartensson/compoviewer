@@ -15,7 +15,7 @@ struct transition {
 	transition();
 	int run(program *trans, renderer *pre, renderer *post, int width, int height, double pretime, double posttime, double transitiontime);
 };
-
+#include<GLFW/glfw3.h>
 class transitionrenderer : public renderer {
 	transition *trans;
 	program *transprogram;
@@ -29,6 +29,14 @@ public:
 	void init();
 
 	int operator()(renderer *pr, int width, int height, double localtime, double prevtime);
+	int go;
+	void key(int key,int scancode,int action,int mods){
+		if(key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+			go = -1;
+		} else if(key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+			go = 1;
+		}
+	}
 };
 
 class fsshader{

@@ -3,6 +3,7 @@
 #include"../core.h"
 #include"../fontstash.h"
 
+#include<GLFW/glfw3.h>
 struct itemrenderer : public transitionrenderer {
 	program *p;
 	buffer *buf;
@@ -16,6 +17,7 @@ struct itemrenderer : public transitionrenderer {
 
 
 	int pos;
+
 
 	std::string number;
 
@@ -52,7 +54,7 @@ struct itemrenderer : public transitionrenderer {
 		glEnable(GL_BLEND);
 		glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
 		program::getuniform("iResolution")->set((float)width, (float)height);
-		program::getuniform("iGlobalTime")->set((float)localtime);
+		program::getuniform("iGlobalTime")->set((float)glfwGetTime());
 		fss->run();
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -72,6 +74,10 @@ struct itemrenderer : public transitionrenderer {
 		sth_vmetrics(c->stash, 3, 100, NULL, NULL, &lh);
 		dy -= lh*1.0f;
 		sth_draw_text(c->stash, 3,100, dx,dy,title.c_str(),&dx);
+
+		dx = width*6.0/7.0;
+		sth_draw_text(c->stash, 3, 100, dx,dy,number.c_str(),&dx);
+
 		sth_vmetrics(c->stash, 3, 50, NULL, NULL, &lh);
 		dy -= lh*1.0f;
 		dx = sx;
@@ -79,16 +85,16 @@ struct itemrenderer : public transitionrenderer {
 		sth_draw_text(c->stash, 3,50, dx,dy,"^",&dx);
 		sth_draw_text(c->stash, 3,50, dx,dy,group.c_str(),&dx);
 		std::istringstream iss(description);
-		sth_vmetrics(c->stash, 3, 48, NULL, NULL, &lh);
+		sth_vmetrics(c->stash, 3, 50, NULL, NULL, &lh);
 		char str[2048];
 		dy = height/4.f;
 		dy -= lh*1.5f;
 		dx = sx;
 		while(iss.getline(str, 2048)){
-			sth_draw_text(c->stash, 3,48, dx,dy,str,&dx);
+			sth_draw_text(c->stash, 3,50, dx,dy,str,&dx);
 		}
 		sth_end_draw(c->stash);
 
-		return localtime>5.0?1:0;
+		return localtime>500.0?1:0;
 	}
 };
