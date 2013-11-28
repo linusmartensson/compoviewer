@@ -15,6 +15,8 @@ struct itemrenderer : public transitionrenderer {
 
 	fsshader *fss;
 
+	std::string previous;
+
 
 	int pos;
 
@@ -35,6 +37,7 @@ struct itemrenderer : public transitionrenderer {
 		count = 2048;
 
 		std::ostringstream oss;
+		oss<<"#";
 		if(pos<10) oss<<"0";
 		oss<<pos;
 
@@ -85,14 +88,20 @@ struct itemrenderer : public transitionrenderer {
 		sth_draw_text(c->stash, 3,50, dx,dy,"^",&dx);
 		sth_draw_text(c->stash, 3,50, dx,dy,group.c_str(),&dx);
 		std::istringstream iss(description);
-		sth_vmetrics(c->stash, 3, 50, NULL, NULL, &lh);
+		sth_vmetrics(c->stash, 3, 35, NULL, NULL, &lh);
 		char str[2048];
 		dy = height/4.f;
 		dy -= lh*1.5f;
 		dx = sx;
 		while(iss.getline(str, 2048)){
-			sth_draw_text(c->stash, 3,50, dx,dy,str,&dx);
+			sth_draw_text(c->stash, 3,35, dx,dy,str,&dx);
 		}
+
+		dx = sx;
+		dy = height-650-35;
+		
+		sth_draw_text(c->stash, 3,35, dx,dy,previous.c_str(),&dx);
+
 		sth_end_draw(c->stash);
 
 		return localtime>500.0?1:0;

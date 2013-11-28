@@ -172,6 +172,8 @@ int main(int argc, char* argv[]){
 	auto entries = efile->AsArray();
 	renderer *r = core::current;
 	int pos = 0;
+
+	std::string previous ="";
 	for_each(entries.begin(), entries.end(), [&](JSONValue *v){
 		pos++;
 		renderer *pr = r;
@@ -181,6 +183,8 @@ int main(int argc, char* argv[]){
 		ir->pos = pos;
 		ir->title = wctos(v, L"title");
 		ir->description = wctos(v, L"description");
+		ir->previous = previous;
+		
 		pr->setup(c, (r = ir));
 
 		if(c->category == 0){
@@ -197,6 +201,8 @@ int main(int argc, char* argv[]){
 			ir->group = wctos(v, L"group");
 			ir->title = wctos(v, L"title");
 			ir->description = wctos(v, L"description");
+					ir->previous = previous;
+
 			br->setup(c, (r = ir));
 		} else if(c->category == 1){
 			
@@ -212,6 +218,8 @@ int main(int argc, char* argv[]){
 			ir->group = wctos(v, L"group");
 			ir->title = wctos(v, L"title");
 			ir->description = wctos(v, L"description");
+					ir->previous = previous;
+
 			br->setup(c, (r = ir));
 		} else if(c->category == 2){
 
@@ -225,8 +233,15 @@ int main(int argc, char* argv[]){
 			ir->group = wctos(v, L"group");
 			ir->title = wctos(v, L"title");
 			ir->description = wctos(v, L"description");
+					ir->previous = previous;
+
 			br->setup(c, (r = ir));
 		}
+		std::ostringstream oss;
+		oss<<"Previous entry: #"<<(pos)<<" "<<ir->artist<<"^"<<ir->group<<" - "<<ir->title;
+
+		previous = oss.str();
+
 	});
 	auto e = (new renderer_end);
 	e->title = c->title;

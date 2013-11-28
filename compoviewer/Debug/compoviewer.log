@@ -1,5 +1,29 @@
-﻿Build started 2013-11-28 18:43:15.
+﻿Build started 2013-11-28 20:58:32.
+     1>Project "C:\Users\linus_000\Documents\GitHub\compoviewer\compoviewer\compoviewer.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Ideps/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt compoviewer.cpp
+         compoviewer.cpp
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\renderers\imagerenderer.h(50): warning C4244: 'initializing' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\renderers\imagerenderer.h(51): warning C4244: 'initializing' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\renderers\itemrenderer.h(81): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\renderers\itemrenderer.h(101): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\compoviewer.cpp(82): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\compoviewer.cpp(143): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\linus_000\Documents\GitHub\compoviewer\Debug\compoviewer.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\linus_000\Documents\GitHub\compoviewer\Debug\compoviewer.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\linus_000\Documents\GitHub\compoviewer\Debug\compoviewer.lib" /MACHINE:X86 Debug\buffers.obj
+         Debug\compoviewer.obj
+         Debug\core.obj
+         Debug\fontstash.obj
+         Debug\JSON.obj
+         Debug\JSONValue.obj
+         Debug\lodepng.obj
+         Debug\renderer.obj
+         Debug\texture.obj
+         Debug\shaders.obj
+         Debug\transitions.obj
+         compoviewer.vcxproj -> C:\Users\linus_000\Documents\GitHub\compoviewer\Debug\compoviewer.exe
+     1>Done Building Project "C:\Users\linus_000\Documents\GitHub\compoviewer\compoviewer\compoviewer.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.03
+Time Elapsed 00:00:02.18

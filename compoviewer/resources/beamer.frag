@@ -11,6 +11,83 @@ uniform float iGlobalTime;
 out vec4 c;
 
 
+#define FIX_ASPECT
+#define VIGNETTING
+#define BOXSTENCIL
+#define ROTATE
+#define MEGADETHLAZORS
+vec3 oorb(void)
+{
+	// uvset [0,1]
+	vec2 uv = gl_FragCoord.xy / iResolution.xy;
+	
+	// [0,1] to [-1,1]
+	
+	vec2 p = 2.0 * uv - 1.0;
+	p -= vec2(0.75,-0.2);
+	p *= 1.5;
+	
+	// force 1:1 aspect ratio if defined
+#ifdef FIX_ASPECT
+	p.x *= iResolution.x/iResolution.y;
+#endif
+	float t = iGlobalTime * 10.0;
+	vec3 color = vec3(0.0);
+	float lp = length(p);
+	
+
+	// performance no/no	
+#ifdef ROTATE
+	float angle = (t/speed)*0.5;
+	p *= mat2(cos(angle),-sin(angle),sin(angle),cos(angle));
+#endif
+
+	vec2 zp = p * zoom;
+	vec2 zp2 = 0.2*zp;
+#if 1
+	// the outer bars
+	float ofs = 1.0/cos(p.y);
+	color.b = clamp(abs((5.0*sin(zp.x * ofs + t))-2.0),0.0,1.0);
+	color.b += clamp(abs((3.0*sin(0.9*zp.x * ofs + t*0.6))-2.0),0.0,1.0);
+	
+	// the inner bulbe
+	color.g += (1.0 - length(p * vec2(1.0,1.5))) * -color.r;
+	//color.rgb += color.r;
+	//color.rgb = color.r * vec3(0.5,0.5,0.5);	
+#endif
+	
+	// box stencil / force nova
+#ifdef BOXSTENCIL
+	float stencil = ceil(1.0-clamp(lp,0.0,1.0));
+	float boxstencil = stencil * length(p * sin(zp2.x) * sin(0.4*t-zp2.y));
+	boxstencil = clamp(abs(boxstencil),0.0,1.0);
+	boxstencil += -1.4+sin(p.y+t*0.2)*2.0;
+	color *= (0.6*boxstencil*10.0*(1.0-lp));
+#endif
+	
+	
+	color = vec3(color.b*0.3,color.b*0.7,color.b*3.0);
+	color += length(p);
+	
+	// vignetting
+#ifdef VIGNETTING
+	color *= 1.0-clamp(abs(length(p)),0.0,1.0);
+#endif
+	
+#ifdef MEGADETHLAZORS
+	color = (color+length(p))*color.r;
+#endif
+	
+
+	//clamp the color
+	color = clamp(abs(color),vec3(0.0),vec3(1.0));
+	
+	// output final color
+	return color * finalTone;
+}
+
+
+
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex 
 //               noise functions.
@@ -116,57 +193,48 @@ float snoise(vec3 v)
 
 vec3 orb(void)
 {
-
-	// uvset [0,1]
 	vec2 uv = gl_FragCoord.xy / iResolution.xy;
+	vec2 p = uv;
 	
-	uv += snoise(vec3(uv*3000.0, iGlobalTime*200.5))*distance(uv,vec2(0.0,0.5))*2.0*0.00525;
-
-	// [0,1] to [-1,1]
-	vec2 p = 2.0 * uv - 1.0;
-	
-	// force 1:1 aspect ratio if defined
-
 	p.x *= iResolution.x/iResolution.y;
 
 	float t = iGlobalTime * 2.0;
-	
-	float lp = length(p);
-	p.x -= 1.0;
 
-	float angle = (t/speed)*0.5;
-	p *= mat2(cos(angle),-sin(angle),sin(angle),cos(angle));
-	vec2 zp = p * zoom*2.1;
-	vec2 zp2 = 0.2*zp;
+	vec3 o = vec3(
+		snoise(vec3(p.xy*0.5,iGlobalTime*0.05)+vec3(2000.0))*5.0,
+		snoise(vec3(p.xy*0.5,iGlobalTime*0.05)+vec3(1000.0))*5.0,
+		snoise(vec3(p.xy*0.5,iGlobalTime*0.05)+vec3(3000.0))*5.0
+	);
 
-	// the outer bars
-	float ofs = 1.0/(cos(p.y)+1.1);
-	vec3 color = vec3(clamp((5.0*sin(zp.x * ofs + t))-2.0,0.0,1.0));
-	color += clamp((3.0*sin(0.9*zp.x * ofs + t*0.6))-2.0,0.0,1.0);
-	
-	// the inner bulbe
-	color += (2.0 - length(p * vec2(1.0,1.5))) * color.r;
-	
-	// box stencil / force nova
-	float stencil = ceil(1.0-clamp(lp,0.0,1.0));
-	float boxstencil = stencil * length(p * sin(zp2.x) * sin(0.4*t-zp2.y));
-	boxstencil = clamp(boxstencil,0.0,1.0);
-	boxstencil += -1.4+sin(p.y+t*0.2)*2.0;
-	color *= (0.6*boxstencil*10.0*(1.0-lp));
-	
-	color = max(color,0.0);	
-	color *= vec3(0.1,0.5,13.0);
-	color += length(p)*0.1;
-	
-	color = (color+length(p))*color.r;
-	color *= color *color*color;
-	
-
-
-	color *= 0.5;
-	
+	mat4 trans = mat4(1.0,0.0,0.0,0.0,
+					  0.0,1.0,0.0,0.0,
+					  0.0,0.0,1.0,0.0,
+					  o.x,o.y,o.z,1.0);
+	mat4 itrans = mat4(1.0,0.0,0.0,0.0,
+					  0.0,1.0,0.0,0.0,
+					  0.0,0.0,1.0,0.0,
+					  -o.x,-o.y,-o.z, 1.0);
+	vec4 color = vec4(p.xy, 1.0,1.0)*trans;
+	float a = cos(length(color)+t*0.2);
+	float b = sin(length(color)+t*0.2);
+	mat4 rot = mat4(  a, -b,0.0,0.0,
+					  b,  a,0.0,0.0,
+					0.0,0.0,1.0,0.0,
+					0.0,0.0,0.0,1.0)*
+			   
+			   mat4(  a,0.0, -b,0.0,
+					0.0,1.0,0.0,0.0,
+					  b,0.0,  a,0.0,
+					0.0,0.0,0.0,1.0)*
+					
+			   mat4(1.0,0.0,0.0,0.0,
+					0.0,  a, -b,0.0,
+					0.0,  b,  a,0.0,
+					0.0,0.0,0.0,1.0);
+	color = (vec4(p.xy,0.0,1.0)*trans*rot*itrans);
+		 
 	// output final color
-	return color * finalTone;
+	return max(color.yyy,0.0);
 }
 
 void main(void)
@@ -178,12 +246,6 @@ vec3 final = vec3(0.0);
 	float t = iGlobalTime * 3.0;
 	p.x *= iResolution.x/iResolution.y;
 	
-	
-	vec3 black = vec3(0.0);
-	vec3 orange = vec3(1.0,159.0/255.0,0.0);
-	vec3 grey = vec3(179.0/255.0,175.0/255.0,178.0/255.0);
-	
-	
 	//create the border
 	float border =  ceil(cos((p.y*3.0)));
 	float border2 =  ceil(cos((p.y*6.0)));
@@ -193,7 +255,7 @@ vec3 final = vec3(0.0);
 
 	float n2 = 0.5*(snoise(vec3(uv*vec2(0.5,0.5),iGlobalTime*0.1))+snoise(vec3(uv*vec2(0.5,0.5),iGlobalTime*0.1)));
 	float tiles = pow(sin(zp.x*0.5 - t*2.0)*sin(zp.y*0.5),2.0)*2.0;
-	final += tiles*0.125*distance(uv,vec2(1.0,0.5));
+	final += tiles*0.0125*distance(uv,vec2(1.0,0.5));
 	
 	// beam
 	float ofs = sin(p.x+t*0.5)*0.2+0.1;
@@ -202,22 +264,26 @@ vec3 final = vec3(0.0);
 	beam += cos((p.y*2.0)+ofs);
 	beam += cos((p.y*5.0)+ofs*2.0);
 	beam = beam;
-	final += clamp(beam,0.0,1.0) * vec3(1.0,3.0,30.0)* border*0.2;
+	final += clamp(beam,0.0,1.0) * vec3(1.0,3.0,30.0)* 0.01;
 	ofs = cos(p.x+t*0.7+50.0)*0.2+0.1;
 	beam += sin((p.y*5.0)+ofs*7.0);
 	beam += cos((p.y*7.0)+ofs*5.0);
 	beam = clamp(beam,0.0,1.0);
-	final += beam*vec3(0.1,0.3,10.0);
+	final += beam*vec3(0.1,0.3,1.0)*0.01;
 	
 	
 //	final *= clamp(1.0-length(p*0.3),0.0,1.0);
 	
 	
 	final += orb();
-	final = final/(final+1.0);
-	final += (pow(tiles,8.0)*0.05-sqrt(tiles)*0.2)*0.1*n2;
-	final = mix(final, -final*(1.0-length(p+vec2(0.5,0.0)))+1.0, step(border, 0.0));
+	final = 1.0-final/(final+1.0);
+	final += oorb();
+	final += mix(vec3(0.0),vec3(0.3,0.7,1.0)+0.45*vec3(1.0,0.5,0.3)*(pow(tiles,8.0)*0.05-sqrt(tiles)*0.2)*0.1*n2,1.0-final.b);
 	
 	
-	c = vec4(final,0.0);
+	final = mix(final, -final*0.0*(1.0-length(p+vec2(0.5,0.0)))+1.0, step(border, 0.0));
+	
+	
+	c = vec4(final,1.0);
+	
 }
