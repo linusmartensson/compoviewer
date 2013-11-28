@@ -275,7 +275,7 @@ vec3 final = vec3(0.0);
 //	final *= clamp(1.0-length(p*0.3),0.0,1.0);
 	
 	
-	final += orb();
+	final += orb()-0.5;
 	final = 1.0-final/(final+1.0);
 	final += oorb();
 	final += mix(vec3(0.0),vec3(0.3,0.7,1.0)+0.45*vec3(1.0,0.5,0.3)*(pow(tiles,8.0)*0.05-sqrt(tiles)*0.2)*0.1*n2,1.0-final.b);

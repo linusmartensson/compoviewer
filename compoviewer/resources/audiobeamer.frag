@@ -250,8 +250,8 @@ vec3 final = vec3(0.0);
 	p.x *= iResolution.x/iResolution.y;
 	
 	//create the border
-	float border =  ceil(cos((p.y*3.0+5.0*min(0.0,sign(p.y))*texture2D(iChannel0, vec2(uv.x,0.5)))));
-	float border3 =  ceil(cos((p.y*3.0+6.0*min(0.0,sign(p.y))*texture2D(iChannel0, vec2(uv.x,0.5)))));
+	float border =  ceil(cos((p.y*3.0+5.0*pow(uv.x+1.0,6.0)*min(0.0,sign(p.y-0.5))*texture2D(iChannel0, vec2(uv.x,0.5)))));
+	float border3 =  ceil(cos((p.y*3.0+4.0*min(0.0,sign(p.y-0.5))*texture2D(iChannel0, vec2(uv.x,0.5)))));
 	float border2 =  ceil(cos((p.y*3.0)));
 	vec2 zp = p * 200.0;
 
@@ -279,18 +279,19 @@ vec3 final = vec3(0.0);
 //	final *= clamp(1.0-length(p*0.3),0.0,1.0);
 	
 	
-	final += orb();
+	final += orb()+border*0.5;
 	final = 1.0-final/(final+1.0);
 	final += oorb();
 	final += mix(vec3(0.0),vec3(0.3,0.7,1.0)+0.45*vec3(1.0,0.5,0.3)*(pow(tiles,8.0)*0.05-sqrt(tiles)*0.2)*0.1*n2,1.0-final.b);
 	
 	
-	float f = clamp(((1.0-border)*border2),0.0,1.0);
+	float f = clamp(1.0-border,0.0,1.0);
 
-	final = mix(final*sin(f*3.14159+3.14159*0.5), -final*0.0*(1.0-length(p+vec2(0.5,0.0)))+1.0, step(border2, 0.0));
+	final = mix(final, -final*0.0*(1.0-length(p+vec2(0.5,0.0)))+1.0, step(border2, 0.0));
 	
 	
 	
 	c = vec4(final,1.0);
-	
+	float rr = texture2D(iChannel0, vec2(0.0,0.5)).r-0.1;
+	c*=clamp(vec4(1.0,1.0-rr*4.0,1.0-rr*4.0,0.0),vec4(0.0),vec4(1.0));
 }
