@@ -1,0 +1,23 @@
+[
+	{
+		"artist"		: "lusius",
+		"group"			: "mental/panda design",
+		"title"			: "nerb",
+		"filename"		: "images/1.png",
+		"description"	: "sajko \nluktar \nsnopp"
+	},
+	{
+		"artist"		: "sajko",
+		"group"			: "mental",
+		"title"			: "nerb2",
+		"filename"		: "images/2.png",
+		"description"	: "we need to get ridd\nof that adhdbarn right away"
+	},
+	{
+		"artist"		: "kittyfork",
+		"group"			: "no group",
+		"title"			: "PURRFECT",
+		"filename"		: "images/3.png",
+		"description"	: "meooo meooo meoo"
+	}
+]
