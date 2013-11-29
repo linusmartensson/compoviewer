@@ -68,8 +68,9 @@ struct videorenderer : public transitionrenderer {
 			unsigned int i=0;
 			tex->set(GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, 1, 1, &i);
 			tex->bind(-1,"");
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
 		}
 
 		if(play && localtime > delay){
