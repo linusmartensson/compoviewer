@@ -21,3 +21,5 @@ Release/
 *.mp3
 *.sdf
 *.suo
+*.log
+*.user
