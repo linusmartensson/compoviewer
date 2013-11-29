@@ -49,12 +49,6 @@ core::core() {
 
 	}
 
-	title = wctos(config, L"compo");
-
-
-	category = config->Child(L"category")->AsNumber();
-
-
 	width = config->Child(L"width")->AsNumber();
 	height = config->Child(L"height")->AsNumber();
 	bool fullscreen = config->Child(L"fullscreen")->AsBool();
@@ -81,7 +75,7 @@ core::core() {
 	glewExperimental = true;
 	if(glewInit() != GL_NO_ERROR) exit(1);
 
-	stash = sth_create(512,512);
+	stash = sth_create(1024,1024);
 	if(!(stash && sth_add_font(stash, 0, "resources/DroidSerif-Regular.ttf"))) die();
 	if(!(stash && sth_add_font(stash, 1, "resources/DroidSerif-Italic.ttf"))) die();
 	if(!(stash && sth_add_font(stash, 2, "resources/DreamHack Normal.ttf"))) die();

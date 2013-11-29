@@ -10,24 +10,20 @@ public:
 
 	enum eCategory
 	{
-		CATEGORY_GFX_HIRES= 0,
-		CATEGORY_GFX_OLDSCHOOL,
-		CATEGORY_VIDEO,
-		CATEGORY_AUDIO
+		CATEGORY_AUDIO = 1,
+		CATEGORY_GFX_HIRES = 2,
+		CATEGORY_GFX_OLDSCHOOL = 3,
+		CATEGORY_VIDEO = 4,
+		
 	};
 
 	int width, height;
-
-	int category;
 
 	static renderer *current;
 	static renderer *previous;
 	GLFWwindow *w;
 	
 	sth_stash *stash;
-
-	std::string title;
-
 
 	static void die();
 	static std::string getfile(std::string path);

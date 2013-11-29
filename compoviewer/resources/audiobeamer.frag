@@ -11,6 +11,9 @@ uniform float iGlobalTime;
 uniform sampler2D iChannel0;
 uniform sampler2D iChannel1;
 
+
+uniform vec4 audiolevel;
+
 out vec4 c;
 
 
@@ -292,6 +295,7 @@ vec3 final = vec3(0.0);
 	
 	
 	c = vec4(final,1.0);
-	float rr = texture(iChannel0, vec2(0.01,0.5)).r-0.5;
+	float rr = texture(iChannel0, vec2(0.01,0.5)).r-0.4;
+	//float rr = (audiolevel.x+audiolevel.y-1.8);
 	c*=clamp(vec4(1.0,1.0-rr*8.0,1.0-rr*8.0,0.0),vec4(0.1),vec4(1.0));
 }

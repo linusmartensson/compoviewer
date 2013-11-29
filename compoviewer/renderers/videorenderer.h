@@ -3,6 +3,7 @@
 #include "../core.h"
 
 
+#include"../videocore.h"
 
 
 struct videorenderer : public transitionrenderer {
@@ -12,10 +13,12 @@ struct videorenderer : public transitionrenderer {
 	texture *tex;
 	GLuint interpolation;
 	std::string filename;
-
+	videocore *vc;
 	program* subinit(){
-		tex = texture::load(filename);
-		tex->bind(-1, "");
+		endtimehint = 5.0;
+		tex = new texture;
+
+//		tex->set(GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, 1280,720, ...);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, interpolation);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, interpolation);
 
@@ -51,6 +54,8 @@ struct videorenderer : public transitionrenderer {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		program::getuniform("resolution")->set((float)width, (float)height);
 
+		
+
 		float tw = (float)tex->w;
 		float th = (float)tex->h;
 
@@ -80,7 +85,7 @@ struct videorenderer : public transitionrenderer {
 		p->update();
 		arr->update();
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); 
-		return localtime>10.0?1:0;
+		return localtime>endtimehint?1:0;
 	}
 };
 

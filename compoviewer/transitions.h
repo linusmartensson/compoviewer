@@ -30,6 +30,7 @@ public:
 	HSTREAM audio;
 	float delay;
 	double audiolength;
+	double endtimehint;
 	float length;
 
 	std::string audiotrack;

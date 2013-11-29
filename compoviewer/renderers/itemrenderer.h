@@ -26,12 +26,15 @@ struct itemrenderer : public transitionrenderer {
 	texture *sponsor;
 
 	std::string number;
+	std::string sponsor_file;
 
 	float idata[512];
-	
 	float sdata[512];
+	float ldata[2];
+	float lsdata[2];
 
 	program* subinit(){
+		endtimehint = 5.0;
 		std::vector<GLuint> shaders;
 		if(audio){
 			fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("audiobeamer.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
@@ -40,10 +43,11 @@ struct itemrenderer : public transitionrenderer {
 		} else {
 			fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("beamer.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
 		}
-		
+
 		sponsor = new texture;
-		if(c->category == 2){
-			sponsor = texture::load("resources/sponsor1.png");
+		if(sponsor_file != ""){
+			std::cout<<"Loading sponsor file"<<std::endl;
+			sponsor = texture::load(sponsor_file);
 		} else {
 			unsigned int i = 0xffffff;
 			sponsor->set(GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, 1, 1, &i);
@@ -77,19 +81,21 @@ struct itemrenderer : public transitionrenderer {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glEnable(GL_BLEND);
 		
-		sponsor->bind(2, "sponsor");
+		
+		program::getuniform("audiolevel")->set(0.f,0.f,0.f,0.f);
 		if(audio){
 			
 			if(first) {
 				memset(idata, 0, sizeof(idata));
 				memset(sdata, 0, sizeof(sdata));
+				ldata[0] = ldata[1] = lsdata[0] = lsdata[1] = 0.f;
 			}
 			float data[512];
 			BASS_ChannelGetData(audio, data, BASS_DATA_FFT1024);
 			
 			for(int i=0;i<512;++i){
-				idata[i]=idata[i]*0.97>data[i]?idata[i]*0.97:data[i];
-				sdata[i]=(sdata[i]+data[i]);
+				idata[i]=idata[i]*0.97f>data[i]?idata[i]*0.97f:data[i];
+				sdata[i]=(sdata[i]+idata[i]);
 			}
 			
 			audiotex->bind(0, "iChannel0");
@@ -100,9 +106,21 @@ struct itemrenderer : public transitionrenderer {
 			
 			audiostex->set(GL_R32F, GL_RED, GL_FLOAT, 512, 1, sdata);
 			
+
+			auto level = BASS_ChannelGetLevel(audio);
+			if(level != -1){
+				ldata[0] = ldata[0]*0.97f>LOWORD(level)/32768.f?ldata[0]*0.97f:LOWORD(level)/32768.f;
+				ldata[1] = ldata[1]*0.97f>HIWORD(level)/32768.f?ldata[1]*0.97f:HIWORD(level)/32768.f;
+				lsdata[0] += ldata[0];
+				lsdata[1] += ldata[1];
+
+				program::getuniform("audiolevel")->set(ldata[0],ldata[1],lsdata[0],lsdata[1]);
+			}
 		}
 
-		
+		program::getuniform("sponsor_res")->set((float)sponsor->w, (float)sponsor->h);
+		sponsor->bind(2, "sponsor");
+
 		glEnable(GL_BLEND);
 		glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
 		program::getuniform("iResolution")->set((float)width, (float)height);
@@ -153,6 +171,6 @@ struct itemrenderer : public transitionrenderer {
 
 		sth_end_draw(c->stash);
 
-		return localtime>(c->category==3?60.0*10.0:5.0)?1:0;
+		return localtime>(audio?60.0*10.0:endtimehint)?1:0;
 	}
 };

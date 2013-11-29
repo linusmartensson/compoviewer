@@ -26,6 +26,7 @@
 #include"transitions.h"
 
 #include"renderers\imagerenderer.h"
+#include"renderers\videorenderer.h"
 #include"renderers\itemrenderer.h"
 
 struct renderer_start : public transitionrenderer{
@@ -222,104 +223,152 @@ static std::string wctos(JSONValue *v, const wchar_t *str){
 
 int main(int argc, char* argv[]){
 	core *c = new core;
-	auto rs = new renderer_start;
-	rs->audiotrack = "resources/kreativ_jingel.wav";
-	rs->delay = 0.5f;
-	rs->title = c->title;
-	core::current = rs;
+	
+	renderer_end *e = 0;
 	JSONValue *efile = JSON::Parse(core::getfile("entries.json").c_str());
-	auto entries = efile->AsArray();
-	transitionrenderer *r = rs;
-	int pos = 0;
-	
+	auto compos= efile->AsArray();
+	transitionrenderer *r = 0;
+
 	double totallength = 0.0;
-
-
-	std::string previous ="";
-	for_each(entries.begin(), entries.end(), [&](JSONValue *v){
-		pos++;
-		transitionrenderer *pr = r;
-		auto ir = new itemrenderer;
-		ir->artist = wctos(v, L"artist");
-		ir->group = wctos(v, L"group");
-		ir->pos = pos;
-		ir->title = wctos(v, L"title");
-		ir->description = wctos(v, L"description");
-		ir->previous = previous;
+	std::string previous;
+	std::for_each(compos.begin(), compos.end(), [&](JSONValue *compo){
+		previous = "";
+		auto rs = new renderer_start;
+		rs->audiotrack = "resources/kreativ_jingel.wav";
+		rs->delay = 0.5f;
 		
-		pr->setup(c, (r = ir));
+		int category = compo->Child(L"category")->AsNumber();
 		
-		if(pr->audio)
-			totallength+=pr->audiolength+pr->delay*2.0;
+		std::string sponsor_file = wctos(compo, L"sponsor_file");
+		if(sponsor_file != "none") sponsor_file = "resources/"+sponsor_file;
+		else sponsor_file = "";
+		auto entries = compo->Child(L"entries")->AsArray();
+		std::string componame = wctos(compo, L"compo");
 
-		if(c->category == 0){
+		std::cout<<"Loading compo "<<componame<<" with category"<<category<<": "<<std::endl;
 
-			//Render photo/hires
-			auto br = new imagerenderer;
-			br->interpolation = GL_LINEAR_MIPMAP_LINEAR;
-			br->filename = wctos(v, L"filename");
-			ir->setup(c, (r = br));
-			
-			ir = new itemrenderer;
-			ir->pos = pos;
-			ir->artist = wctos(v, L"artist");
-			ir->group = wctos(v, L"group");
-			ir->title = wctos(v, L"title");
-			ir->description = wctos(v, L"description");
-					ir->previous = previous;
+		rs->title = componame;
 
-			br->setup(c, (r = ir));
-		} else if(c->category == 1){
-			
-			//Render oldschool
-			auto br = new imagerenderer;
-			br->interpolation = GL_NEAREST;
-			br->filename = wctos(v, L"filename");
-			ir->setup(c, (r = br));
-			
-			ir = new itemrenderer;
-			ir->pos = pos;
-			ir->artist = wctos(v, L"artist");
-			ir->group = wctos(v, L"group");
-			ir->title = wctos(v, L"title");
-			ir->description = wctos(v, L"description");
-					ir->previous = previous;
-
-			br->setup(c, (r = ir));
-		} else if(c->category == 2){
-
-			//Render wild
-			auto br = new renderer_black;
-			ir->setup(c, (r = br));
-			ir = new itemrenderer;
-			ir->dotransition = false;
-			ir->pos = pos;
-			ir->artist = wctos(v, L"artist");
-			ir->group = wctos(v, L"group");
-			ir->title = wctos(v, L"title");
-			ir->description = wctos(v, L"description");
-					ir->previous = previous;
-
-			br->setup(c, (r = ir));
-		} else if(c->category == 3){
-
-			//Render audio
-			ir->audiotrack = wctos(v, L"filename");
-			ir->delay = 2.0;
+		if(e == 0)
+			core::current = rs;
+		else {
+			e->setup(c, rs);
 		}
-		std::ostringstream oss;
-		oss<<"Previous entry: #"<<(pos)<<" "<<ir->artist<<"^"<<ir->group<<" - "<<ir->title;
-
-		previous = oss.str();
-
-	});
-	auto e = (new renderer_end);
-	e->title = c->title;
+		
+		r = rs;
+		int pos = 0;
 	
+		double compolength = 0.0;
+		
+		itemrenderer *ir = 0;
+		
+
+		for_each(entries.begin(), entries.end(), [&](JSONValue *v){
+			pos++;
+			transitionrenderer *pr = r;
+			ir = new itemrenderer;
+			ir->artist = wctos(v, L"artist");
+			ir->group = wctos(v, L"group");
+			ir->pos = pos;
+			ir->title = wctos(v, L"title");
+			ir->description = wctos(v, L"description");
+			ir->previous = previous;
+			ir->sponsor_file = sponsor_file;
+		
+			pr->setup(c, (r = ir));
+		
+			if(pr->audio)
+				compolength+=pr->audiolength+pr->delay*2.0;
+			else{
+				compolength+=pr->endtimehint;
+			}
+
+			if(category == core::CATEGORY_GFX_HIRES){
+
+				//Render photo/hires
+				auto br = new imagerenderer;
+				br->interpolation = GL_LINEAR_MIPMAP_LINEAR;
+				br->filename = "submissions/"+wctos(v, L"filename");
+				ir->setup(c, (r = br));
+
+				ir = new itemrenderer;
+				ir->pos = pos;
+				ir->artist = wctos(v, L"artist");
+				ir->group = wctos(v, L"group");
+				ir->title = wctos(v, L"title");
+				ir->description = wctos(v, L"description");
+				ir->previous = previous;
+				ir->sponsor_file = sponsor_file;
+
+				br->setup(c, (r = ir));
+				compolength+=br->endtimehint;
+			} else if(category == core::CATEGORY_GFX_OLDSCHOOL){
+			
+				//Render oldschool
+				auto br = new imagerenderer;
+				br->interpolation = GL_NEAREST;
+				br->filename = "submissions/"+wctos(v, L"filename");
+				ir->setup(c, (r = br));
+			
+				ir = new itemrenderer;
+				ir->pos = pos;
+				ir->artist = wctos(v, L"artist");
+				ir->group = wctos(v, L"group");
+				ir->title = wctos(v, L"title");
+				ir->description = wctos(v, L"description");
+				ir->previous = previous;
+				ir->sponsor_file = sponsor_file;
+
+				br->setup(c, (r = ir));
+				compolength+=br->endtimehint;
+			} else if(category == core::CATEGORY_VIDEO){
+
+				//Render wild
+				auto br = new renderer_black;
+				//br->filename = "submissions/"+wctos(v, L"filename");
+				ir->setup(c, (r = br));
+				ir = new itemrenderer;
+				ir->dotransition = false;
+				ir->pos = pos;
+				ir->artist = wctos(v, L"artist");
+				ir->group = wctos(v, L"group");
+				ir->title = wctos(v, L"title");
+				ir->description = wctos(v, L"description");
+				
+				ir->sponsor_file = sponsor_file;
+				ir->previous = previous;
+
+				br->setup(c, (r = ir));
+				compolength+=br->endtimehint;
+			} else if(category == core::CATEGORY_AUDIO){
+
+				//Render audio
+				ir->audiotrack = "submissions/"+wctos(v, L"filename");
+				ir->delay = 2.0;
+			}
+			
+			std::ostringstream oss;
+			oss<<"Previous entry: #"<<(pos)<<" "<<ir->artist<<"^"<<ir->group<<" - "<<ir->title;
+
+			previous = oss.str();
+
+		});
+		e = (new renderer_end);
+		
+		
+		ir->setup(c, e);
+		
+		if(ir->audio)
+			totallength+=r->audiolength+r->delay*2.0;
+		std::cout<<rs->title<<" compo length: "<<compolength/60.f<<std::endl;
+		
+		e->title = wctos(compo, L"compo");
+
+		totallength += compolength;
+	});	
 
 	r->setup(c,e->setup(c, (new renderer_shutdown)->setup(c,0)));
-	if(r->audio)
-		totallength+=r->audiolength+r->delay*2.0;
+	
 
 	std::cout<<"Minutes:"<<totallength/60.f<<std::endl;
 

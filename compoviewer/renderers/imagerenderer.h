@@ -10,6 +10,7 @@ struct imagerenderer : public transitionrenderer {
 	GLuint interpolation;
 	std::string filename;
 	program* subinit(){
+		endtimehint = 10.0;
 		tex = texture::load(filename);
 		tex->bind(-1, "");
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, interpolation);
@@ -76,7 +77,7 @@ struct imagerenderer : public transitionrenderer {
 		p->update();
 		arr->update();
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); 
-		return localtime>10.0?1:0;
+		return localtime>endtimehint?1:0;
 	}
 };
 
