@@ -110,7 +110,7 @@ struct renderer_start : public transitionrenderer{
 			arr->update();
 			glDrawArrays(GL_TRIANGLES, 0, c->stash->nverts);
 		};
-		program::uniforms["color"]->set(1.f,102/255.f,0.f,1.f);
+		program::uniforms["color"]->set(1.f,102/255.f,0.f,(float)localtime-1.f);
 		sth_begin_draw(c->stash);
 		sth_vmetrics(c->stash, 3, 50, NULL, NULL, &lh);
 		dy = height*0.7f+lh*1.f;
@@ -180,12 +180,15 @@ struct renderer_end : public transitionrenderer {
 			arr->update();
 			glDrawArrays(GL_TRIANGLES, 0, c->stash->nverts);
 		};
-		program::uniforms["color"]->set(1.f,102/255.f,0.f,1.f);
+		program::uniforms["color"]->set(1.f,102/255.f,0.f,4.f-(float)localtime);
 		sth_begin_draw(c->stash);
 		sth_vmetrics(c->stash, 3, 100, NULL, NULL, &lh);
 		dy = height*0.5f-lh*0.5f;
 		sth_draw_text(c->stash, 3,100, dx,dy,(std::string("End of ")+title).c_str(),&dx);
 		sth_vmetrics(c->stash, 3, 50, NULL, NULL, &lh);
+		sth_end_draw(c->stash);
+		program::uniforms["color"]->set(1.f,102/255.f,0.f,4.0f-(float)localtime);
+		sth_begin_draw(c->stash);
 		dy -= lh*1.0f;
 		dx = sx;
 		sth_draw_text(c->stash, 3,50, dx,dy,std::string("Don't forget to vote!").c_str(),&dx);
