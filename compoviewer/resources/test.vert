@@ -1,4 +1,4 @@
-#version 420
+#version 400
 in vec4 text_position; 
 out vec2 tc; 
 uniform vec2 resolution; 

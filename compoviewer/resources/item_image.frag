@@ -1,4 +1,4 @@
-#version 420  
+#version 400  
 uniform sampler2D tex;
 uniform vec2 image_resolution;
 uniform vec2 resolution;

@@ -1,8 +1,15 @@
-﻿Build started 2013-11-29 01:30:43.
+﻿Build started 2013-11-29 01:44:01.
      1>Project "C:\Users\linus_000\Documents\GitHub\compoviewer\compoviewer\compoviewer.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Ideps/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt texture.cpp
-         texture.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Ideps/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt core.cpp
+         core.cpp
+     1>c:\program files (x86)\windows kits\8.0\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 c:\users\linus_000\documents\github\compoviewer\compoviewer\deps\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\core.cpp(36): warning C4996: 'wcstombs': This function or variable may be unsafe. Consider using wcstombs_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdlib.h(554) : see declaration of 'wcstombs'
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\core.cpp(53): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\core.cpp(55): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\core.cpp(56): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\linus_000\Documents\GitHub\compoviewer\Debug\compoviewer.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\linus_000\Documents\GitHub\compoviewer\Debug\compoviewer.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\linus_000\Documents\GitHub\compoviewer\Debug\compoviewer.lib" /MACHINE:X86 Debug\buffers.obj
          Debug\compoviewer.obj
@@ -20,4 +27,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.77
+Time Elapsed 00:00:01.88

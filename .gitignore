@@ -19,3 +19,5 @@ Release/
 *.opensdf
 *.log
 *.mp3
+*.sdf
+*.suo

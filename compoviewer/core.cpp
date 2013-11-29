@@ -59,10 +59,8 @@ core::core() {
 	if(!glfwInit()) exit(1);
 	auto s = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	glfwSetErrorCallback(&error_callback);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_DECORATED, 0);
 	if(!(w=glfwCreateWindow(width, height, "fonttest", fullscreen?glfwGetPrimaryMonitor():0, 0))) exit(1);
 	glfwGetFramebufferSize(w, &width, &height);

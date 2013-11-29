@@ -1,4 +1,4 @@
-#version 420
+#version 400
 
 const float speed = 10.0;
 const float zoom = 10.0;

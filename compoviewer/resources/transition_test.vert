@@ -1,4 +1,4 @@
-#version 420
+#version 400
 out vec2 tc; 
 
 in vec2 transition_position;
