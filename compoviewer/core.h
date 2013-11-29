@@ -38,7 +38,7 @@ public:
 };
 
 class renderer_shutdown : public renderer {
-	int operator()(renderer *pr, int width, int height, double localtime, double prevtime){
+	int operator()(renderer *pr, int width, int height, double localtime, double prevtime, bool first){
 		core::die(); 
 		return 0;
 	}

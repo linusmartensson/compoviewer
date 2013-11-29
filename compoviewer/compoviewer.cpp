@@ -36,11 +36,18 @@ struct renderer_start : public transitionrenderer{
 	float sx, sy, dx, dy, lh;
 	fsshader *fss;
 	
+	texture *audiotex, *audiostex;
+
 	std::string title;
+	float idata[512];
+	
+	float sdata[512];
 
 	program* subinit(){
 		std::vector<GLuint> shaders;
-		fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("presentation.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
+		audiotex = new texture;
+		audiostex = new texture;
+		fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("presentation2.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
 
 		texttexture = new texture(c->stash->tex);
 		shaders.clear();
@@ -53,16 +60,42 @@ struct renderer_start : public transitionrenderer{
 		return program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("transition_test.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders)));
 	}
 	int run(int width, int height, double localtime, bool first){
+
+				
+		if(audio){
+			
+			if(first) {
+				memset(idata, 0, sizeof(idata));
+				memset(sdata, 0, sizeof(sdata));
+			}
+			float data[512];
+			BASS_ChannelGetData(audio, data, BASS_DATA_FFT1024);
+			
+			for(int i=0;i<512;++i){
+				idata[i]=idata[i]*0.97>data[i]?idata[i]*0.97:data[i];
+				sdata[i]=(sdata[i]+data[i]);
+			}
+			
+			audiotex->set(GL_R32F, GL_RED, GL_FLOAT, 512, 1, idata);
+			
+			audiostex->set(GL_R32F, GL_RED, GL_FLOAT, 512, 1, sdata);
+			audiotex->bind(1, "iChannel0");
+			
+			audiostex->bind(2, "iChannel1");
+			
+			
+		}
+
 		glViewport(0,0, width, height);
 		glClearColor(1.0f,102/255.f,0.f,1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		texttexture->bind(0, "tex");
 		
 		program::getuniform("iResolution")->set((float)width,(float)height);
 		program::getuniform("iGlobalTime")->set((float)localtime);
 		fss->run();
-
+		
+		texttexture->bind(0, "tex");
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dx = sx = (float)width/10.f; 
@@ -85,8 +118,13 @@ struct renderer_start : public transitionrenderer{
 		sth_vmetrics(c->stash, 3, 100, NULL, NULL, &lh);
 		dx = sx;
 		dy = height*0.7f-lh*0.5f;
+		sth_end_draw(c->stash);
+		
+		program::getuniform("color")->set(1.f,102/255.f,0.f,(float)localtime-3.0f);
+		sth_begin_draw(c->stash);
 		sth_draw_text(c->stash, 3,100, dx,dy,title.c_str(),&dx);
 		sth_end_draw(c->stash);
+
 		return localtime>500.0?1:0;
 	}
 };
@@ -102,7 +140,7 @@ struct renderer_end : public transitionrenderer {
 	program* subinit(){
 		
 		std::vector<GLuint> shaders;
-		fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("presentation.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
+		fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("presentation2.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
 		shaders.clear();
 		
 		texttexture = new texture(c->stash->tex);
@@ -147,6 +185,13 @@ struct renderer_end : public transitionrenderer {
 		sth_vmetrics(c->stash, 3, 100, NULL, NULL, &lh);
 		dy = height*0.5f-lh*0.5f;
 		sth_draw_text(c->stash, 3,100, dx,dy,(std::string("End of ")+title).c_str(),&dx);
+		sth_vmetrics(c->stash, 3, 50, NULL, NULL, &lh);
+		dy -= lh*1.0f;
+		dx = sx;
+		sth_draw_text(c->stash, 3,50, dx,dy,std::string("Don't forget to vote!").c_str(),&dx);
+		dy -= lh*1.0f;
+		dx = sx;
+		sth_draw_text(c->stash, 3,50, dx,dy,std::string("http://kreativ.dreamhack.se").c_str(),&dx);
 		sth_end_draw(c->stash);
 
 		return localtime>5.0?1:0;

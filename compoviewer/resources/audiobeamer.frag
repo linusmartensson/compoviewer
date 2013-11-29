@@ -250,7 +250,7 @@ vec3 final = vec3(0.0);
 	p.x *= iResolution.x/iResolution.y;
 	
 	//create the border
-	float border =  ceil(cos((p.y*3.0+5.0*pow(uv.x+1.0,6.0)*min(0.0,sign(p.y-0.5))*texture(iChannel0, vec2(uv.x,0.5)).r)));
+	float border =  ceil(cos((p.y*3.0+5.0*pow(uv.x+1.0,3.0)*min(0.0,sign(p.y-0.5))*texture(iChannel0, vec2(uv.x,0.5)).r)));
 	float border3 =  ceil(cos((p.y*3.0+4.0*min(0.0,sign(p.y-0.5))*texture(iChannel0, vec2(uv.x,0.5)).r)));
 	float border2 =  ceil(cos((p.y*3.0)));
 	vec2 zp = p * 200.0;

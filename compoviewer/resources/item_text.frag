@@ -5,5 +5,5 @@ in vec2 tc;
 out vec4 c; 
 void main(){ 
 	c.rgb = color.rgb; 
-	c.a = texture2D(tex, tc.xy).r;
+	c.a = texture2D(tex, tc.xy).r*clamp(color.a,0.0,1.0);
 }

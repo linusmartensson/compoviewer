@@ -23,6 +23,7 @@ struct itemrenderer : public transitionrenderer {
 
 	texture *audiotex;
 	texture *audiostex;
+	texture *sponsor;
 
 	std::string number;
 
@@ -32,17 +33,21 @@ struct itemrenderer : public transitionrenderer {
 
 	program* subinit(){
 		std::vector<GLuint> shaders;
-		std::cout<<audio;
 		if(audio){
 			fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("audiobeamer.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
-		std::cout<<"hello";	
 			audiotex = new texture;
-			std::cout<<audiotex;
 			audiostex = new texture;
 		} else {
 			fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("beamer.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
 		}
 		
+		sponsor = new texture;
+		if(c->category == 2){
+			sponsor = texture::load("resources/sponsor1.png");
+		} else {
+			unsigned int i = 0xffffff;
+			sponsor->set(GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, 1, 1, &i);
+		}
 
 		texttexture = new texture(c->stash->tex);
 		shaders.clear();
@@ -72,6 +77,7 @@ struct itemrenderer : public transitionrenderer {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glEnable(GL_BLEND);
 		
+		sponsor->bind(2, "sponsor");
 		if(audio){
 			
 			if(first) {
@@ -141,7 +147,7 @@ struct itemrenderer : public transitionrenderer {
 		}
 
 		dx = sx;
-		dy = height-650.f-35.f;
+		dy = height-650.f;
 		
 		sth_draw_text(c->stash, 3,35, dx,dy,previous.c_str(),&dx);
 

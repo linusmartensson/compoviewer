@@ -8,6 +8,8 @@ const float finalTone = 1.0;
 uniform vec2 iResolution;
 uniform float iGlobalTime;
 
+uniform sampler2D sponsor;
+
 out vec4 c;
 
 
@@ -275,7 +277,7 @@ vec3 final = vec3(0.0);
 //	final *= clamp(1.0-length(p*0.3),0.0,1.0);
 	
 	
-	final += orb()-0.5;
+	final += orb()+0.5;
 	final = 1.0-final/(final+1.0);
 	final += oorb();
 	final += mix(vec3(0.0),vec3(0.3,0.7,1.0)+0.45*vec3(1.0,0.5,0.3)*(pow(tiles,8.0)*0.05-sqrt(tiles)*0.2)*0.1*n2,1.0-final.b);
@@ -283,6 +285,10 @@ vec3 final = vec3(0.0);
 	
 	final = mix(final, -final*0.0*(1.0-length(p+vec2(0.5,0.0)))+1.0, step(border, 0.0));
 	
+	vec2 pp = (uv-vec2(0.735,0.01))*vec2(iResolution.x/iResolution.y,1.0)*vec2(1.0/(3234./466.),1.0)*15.0;
+
+	vec3 s = texture(sponsor, clamp(pp,vec2(0.0),vec2(1.0))*vec2(1.0,-1.0)).rgb;
+	final = mix(final, s, step(0.0,pp.y)*(1.0-step(1.0,pp.y))*step(0.0,pp.x)*(1.0-step(1.0,pp.x)));
 	
 	c = vec4(final,1.0);
 	

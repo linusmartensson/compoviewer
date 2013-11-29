@@ -1,8 +1,18 @@
+<<<<<<< HEAD
 ﻿Build started 2013-11-29 04:41:33.
      1>Project "C:\Users\lusius\Documents\GitHub\compoviewer\compoviewer\compoviewer.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Ideps/include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt videocore.cpp
          videocore.cpp
+=======
+﻿Build started 2013-11-29 05:00:56.
+     1>Project "C:\Users\linus_000\Documents\GitHub\compoviewer\compoviewer\compoviewer.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Ideps/include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt compoviewer.cpp
+         compoviewer.cpp
+     1>c:\users\linus_000\documents\github\compoviewer\compoviewer\renderers\itemrenderer.h(90): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>compoviewer.cpp(75): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+>>>>>>> wee
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\lusius\Documents\GitHub\compoviewer\Release\compoviewer.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\lusius\Documents\GitHub\compoviewer\Release\compoviewer.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\lusius\Documents\GitHub\compoviewer\Release\compoviewer.lib" /MACHINE:X86 /SAFESEH:NO /CRINKLER Release\buffers.obj
          Release\compoviewer.obj
@@ -24,4 +34,8 @@
 
 Build succeeded.
 
+<<<<<<< HEAD
 Time Elapsed 00:00:01.00
+=======
+Time Elapsed 00:00:05.04
+>>>>>>> wee

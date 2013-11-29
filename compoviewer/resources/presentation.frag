@@ -2,7 +2,8 @@
 
 uniform float iGlobalTime;
 uniform vec2 iResolution;
-
+uniform sampler2D iChannel0;
+uniform sampler2D iChannel1;
 
 vec3 COLOR1 = vec3(0.0, 0.0, 0.3);
 vec3 COLOR2 = vec3(0.5, 0.0, 0.0);
@@ -141,20 +142,12 @@ void main(void)
 	
 	for(float i = 0.0; i < 3.0; i++) {
 		
-		uv.y += (0.07 * sin(uv.x + (i+1.0)*uv.x+ i/7.0 + iGlobalTime/(iGlobalTime+1.0) ));
-		wave_width = abs(1.0 / (50.0 * pow(uv.y,2.0)));
+		uv.y += (0.07 * sin(uv.x + (i+1.0)*uv.x+ i/7.0 + iGlobalTime))*snoise(vec3(uv.xy*i,float(i+iGlobalTime*0.1)))*10.0;
+		wave_width = abs(1.0 / (50.0 * pow(uv.y,2.0)))*10.0;
 		wave_color += vec3(wave_width * 255./255., wave_width*255./255., wave_width*0.2);
 	}
 	uv = m*uv;
-	final_color += 1.0/wave_color;
-	wave_color = vec3(0.0);
-	for(float i = 0.0; i < 3.0; i++) {
-		
-		uv.y += (0.07 * sin(uv.x+2.0 + (i+0.3)*uv.x+ i/12.0 + iGlobalTime ));
-		wave_width = abs(1.0 / (50.0 * pow(uv.y,2.0)))*10.0;
-		wave_color += vec3(wave_width * 255./255., wave_width*102./255., wave_width*0.2)*0.1;
-	}
-	final_color -= wave_color;
+	final_color += 1.0/wave_color*10.0;
 
 
 	float t = iGlobalTime;
