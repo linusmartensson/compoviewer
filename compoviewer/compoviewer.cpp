@@ -141,7 +141,7 @@ struct renderer_end : public transitionrenderer {
 	fsshader *fss;
 
 	program* subinit(){
-		
+		endtimehint = 5.0;
 		std::vector<GLuint> shaders;
 		fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("presentation2.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
 		shaders.clear();
@@ -200,7 +200,7 @@ struct renderer_end : public transitionrenderer {
 		sth_draw_text(c->stash, 3,50, dx,dy,std::string("http://kreativ.dreamhack.se").c_str(),&dx);
 		sth_end_draw(c->stash);
 
-		return localtime>5.0?1:0;
+		return localtime>endtimehint?1:0;
 	}
 };
 class renderer_black : public transitionrenderer {
@@ -328,7 +328,7 @@ int main(int argc, char* argv[]){
 				//Render wild
 				auto br = new videorenderer;
 				br->filename = "submissions/"+wctos(v, L"filename");
-				br->delay = 2.0;
+				br->delay = 1.0;
 				ir->setup(c, (r = br));
 				ir = new itemrenderer;
 				ir->pos = pos;
@@ -369,8 +369,10 @@ int main(int argc, char* argv[]){
 		totallength += compolength;
 	});	
 
+
 	r->setup(c,e->setup(c, (new renderer_shutdown)->setup(c,0)));
 	
+	e->endtimehint = 1000000.0;
 
 	std::cout<<"Minutes:"<<totallength/60.f<<std::endl;
 
