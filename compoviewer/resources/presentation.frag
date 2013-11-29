@@ -172,7 +172,7 @@ void main(void)
 	c -= 1.0-clamp(1.0-pow(distance(uvf.x,0.0),16.0), 0.0,1.0);
 	c *= clamp(distance(uvf.x*uvf.x,1.0),0.0,1.0);
 	c = max(c, vec4(0.0))*1.0;
-	c+=0.5;
+	c+=0.1;
 	c = c/(c+1.0)+0.075;
 	c+= (pow(tiles,8.0)*0.05-sqrt(tiles)*0.2)*0.05*n2;
 	c.a = 1.0;
