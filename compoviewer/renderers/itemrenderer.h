@@ -31,10 +31,12 @@ struct itemrenderer : public transitionrenderer {
 
 	program* subinit(){
 		std::vector<GLuint> shaders;
-
+		std::cout<<audio;
 		if(audio){
 			fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("audiobeamer.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
+		std::cout<<"hello";	
 			audiotex = new texture;
+			std::cout<<audiotex;
 			audiostex = new texture;
 		} else {
 			fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("beamer.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
@@ -63,25 +65,30 @@ struct itemrenderer : public transitionrenderer {
 	
 	
 	int run(int width, int height, double localtime, bool first){
+	
 		texttexture->bind(0, "tex");
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glEnable(GL_BLEND);
 		
 		if(audio){
+			
 			if(first) {
 				memset(idata, 0, sizeof(idata));
 				memset(sdata, 0, sizeof(sdata));
 			}
 			float data[512];
 			BASS_ChannelGetData(audio, data, BASS_DATA_FFT1024);
+			
 			for(int i=0;i<512;++i){
 				idata[i]=idata[i]*0.97>data[i]?idata[i]*0.97:data[i];
 				sdata[i]=(sdata[i]+data[i]);
 			}
+			
 			audiotex->bind(0, "iChannel0");
+			
 			audiostex->bind(1, "iChannel1");
-
+			
 			audiotex->set(GL_R32F, GL_RED, GL_FLOAT, 512, 1, idata);
 			
 			audiostex->set(GL_R32F, GL_RED, GL_FLOAT, 512, 1, sdata);

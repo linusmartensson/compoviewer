@@ -81,7 +81,6 @@ void transitionrenderer::init(){
 	length = 1.f;
 	go = 0;
 	trans = new transition;
-	transprogram = subinit();
 	
 	
 	if(audiotrack != ""){
@@ -95,6 +94,7 @@ void transitionrenderer::init(){
 	} else {
 		audio = 0;
 	}
+	transprogram = subinit();
 }
 
 int transitionrenderer::operator()(renderer *pr, int width, int height, double localtime, double prevtime, bool first){
@@ -110,22 +110,20 @@ int transitionrenderer::operator()(renderer *pr, int width, int height, double l
 	if(audio && localtime > audiolength+delay*2.0)
 		go = 1;
 
-
 	int ret = go;
 	go = 0;
 	if(pr && localtime/length < 1.0 && dotransition){
-		
 		int r = trans->run(transprogram, pr, this, width, height, prevtime, localtime, localtime/length, first);
 		if(!ret) ret = r;
 	} else {
 		int r = run(width, height, localtime, first);
 		if(!ret) ret = r;
 	}
-
 	if(ret && audio){
 		BASS_ChannelStop(audio);
 		play = false;
 	}
 
+	
 	return ret;
 }
