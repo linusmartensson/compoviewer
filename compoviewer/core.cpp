@@ -38,6 +38,7 @@ static std::string wctos(JSONValue *v, const wchar_t *str){
 }
 
 core::core() {
+
 	std::wstring conf = wgetfile("test.json");
 	JSONValue *config = JSON::Parse(conf.c_str());
 
@@ -50,7 +51,9 @@ core::core() {
 
 	title = wctos(config, L"compo");
 
+
 	category = config->Child(L"category")->AsNumber();
+
 
 	width = config->Child(L"width")->AsNumber();
 	height = config->Child(L"height")->AsNumber();

@@ -7,6 +7,15 @@ struct sth_stash;
 
 class core{
 public:
+
+	enum eCategory
+	{
+		CATEGORY_GFX_HIRES= 0,
+		CATEGORY_GFX_OLDSCHOOL,
+		CATEGORY_VIDEO,
+		CATEGORY_AUDIO
+	};
+
 	int width, height;
 
 	int category;

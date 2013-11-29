@@ -54,6 +54,12 @@
     <ClInclude Include="renderers\itemrenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="renderers\videorenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="videocore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fontstash.cpp">
@@ -87,6 +93,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="compoviewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="videocore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

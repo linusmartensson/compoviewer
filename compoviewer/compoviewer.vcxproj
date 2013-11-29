@@ -96,10 +96,12 @@
     <ClInclude Include="renderer.h" />
     <ClInclude Include="renderers\imagerenderer.h" />
     <ClInclude Include="renderers\itemrenderer.h" />
+    <ClInclude Include="renderers\videorenderer.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="stb_truetype.h" />
     <ClInclude Include="transitions.h" />
+    <ClInclude Include="videocore.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buffers.cpp" />
@@ -113,6 +115,7 @@
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="shaders.cpp" />
     <ClCompile Include="transitions.cpp" />
+    <ClCompile Include="videocore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\DreamHack Normal.ttf" />

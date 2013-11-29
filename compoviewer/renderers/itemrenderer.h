@@ -4,6 +4,7 @@
 #include"../fontstash.h"
 
 #include<GLFW/glfw3.h>
+
 struct itemrenderer : public transitionrenderer {
 	program *p;
 	buffer *buf;

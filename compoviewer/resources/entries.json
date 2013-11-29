@@ -3,7 +3,7 @@
 		"artist"		: "lusius",
 		"group"			: "mental/panda design",
 		"title"			: "nerb",
-		"filename"		: "tracks/01.mp3",
+		"filename"		: "tracks/01.wav",
 		"description"	: "sajko \nluktar \nsnopp"
 	},
 	{
@@ -17,7 +17,21 @@
 		"artist"		: "kittyfork",
 		"group"			: "no group",
 		"title"			: "PURRFECT",
-		"filename"		: "tracks/03.mp3",
+		"filename"		: "tracks/03.wav",
+		"description"	: "meooo meooo meoo"
+	},
+	{
+		"artist"		: "forkkitty",
+		"group"			: "no group",
+		"title"			: "PURRFECT",
+		"filename"		: "tracks/04.mp3",
+		"description"	: "kittyfork och sajko luktar snowp :) "
+	},
+	{
+		"artist"		: "kittyforkDERP",
+		"group"			: "no group",
+		"title"			: "PURRRRMAO",
+		"filename"		: "tracks/05.mp3",
 		"description"	: "meooo meooo meoo"
 	}
 ] 
