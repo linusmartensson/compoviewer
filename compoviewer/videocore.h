@@ -12,7 +12,7 @@
 struct videocore{
 	struct dataStorage{
 		unsigned int* data;
-		bool lock;
+		volatile bool lock;
 	};
 private:
 	static unsigned int lockCounter;
@@ -144,7 +144,7 @@ public:
 		//*p_pixels = m_DataStorage.data;
 		for(unsigned int i=0;i<VIDEOBUFFERS;i++)
 		{
-			if(!m_DataStorage[i].lock)
+			if(!m_DataStorage[i].lock && m_DataStorage[i].data != lastBuffer)
 			{
 				m_DataStorage[i].lock = true;
 				*p_pixels = m_DataStorage[i].data;
