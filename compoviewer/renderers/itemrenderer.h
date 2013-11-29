@@ -32,6 +32,7 @@ struct itemrenderer : public transitionrenderer {
 	float sdata[512];
 	float ldata[2];
 	float lsdata[2];
+	float hassponsor;
 
 	program* subinit(){
 		endtimehint = 5.0;
@@ -44,13 +45,17 @@ struct itemrenderer : public transitionrenderer {
 			fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("beamer.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
 		}
 
-		sponsor = new texture;
+		
 		if(sponsor_file != ""){
 			std::cout<<"Loading sponsor file"<<std::endl;
 			sponsor = texture::load(sponsor_file);
+			hassponsor = 1.0;
 		} else {
-			unsigned int i = 0;
-			sponsor->set(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, 1, 1, &i);
+			hassponsor = 0.0;
+			sponsor = new texture;
+			unsigned int i[] = {0,0,0,0};
+			sponsor->set(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, 2, 2, &i);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
 		}
 
 		texttexture = new texture(c->stash->tex);
@@ -118,6 +123,7 @@ struct itemrenderer : public transitionrenderer {
 			}
 		}
 
+		program::getuniform("hassponsor")->set((float)hassponsor);
 		program::getuniform("sponsor_res")->set((float)sponsor->w, (float)sponsor->h);
 		sponsor->bind(2, "sponsor");
 
