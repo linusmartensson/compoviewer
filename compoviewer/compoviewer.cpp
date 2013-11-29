@@ -1,6 +1,8 @@
 
 #pragma comment(lib, "OpenGL32.lib")
 #pragma comment(lib, "deps/bass.lib")
+#pragma comment(lib, "deps/libvlc.lib")
+#pragma comment(lib, "deps/libvlccore.lib")
 #define _CRT_SECURE_NO_WARNINGS
 #ifndef NDEBUG
 #pragma comment(lib, "deps/Debug/glfw3.lib")
@@ -73,7 +75,7 @@ struct renderer_start : public transitionrenderer{
 			BASS_ChannelGetData(audio, data, BASS_DATA_FFT1024);
 			
 			for(int i=0;i<512;++i){
-				idata[i]=idata[i]*0.97>data[i]?idata[i]*0.97:data[i];
+				idata[i]=idata[i]*0.97f>data[i]?idata[i]*0.97f:data[i];
 				sdata[i]=(sdata[i]+data[i]);
 			}
 			
@@ -237,7 +239,7 @@ int main(int argc, char* argv[]){
 		rs->audiotrack = "resources/kreativ_jingel.wav";
 		rs->delay = 0.5f;
 		
-		int category = compo->Child(L"category")->AsNumber();
+		int category = (int)compo->Child(L"category")->AsNumber();
 		
 		std::string sponsor_file = wctos(compo, L"sponsor_file");
 		if(sponsor_file != "none") sponsor_file = "resources/"+sponsor_file;
@@ -324,11 +326,11 @@ int main(int argc, char* argv[]){
 			} else if(category == core::CATEGORY_VIDEO){
 
 				//Render wild
-				auto br = new renderer_black;
-				//br->filename = "submissions/"+wctos(v, L"filename");
+				auto br = new videorenderer;
+				br->filename = "submissions/"+wctos(v, L"filename");
+				br->delay = 2.0;
 				ir->setup(c, (r = br));
 				ir = new itemrenderer;
-				ir->dotransition = false;
 				ir->pos = pos;
 				ir->artist = wctos(v, L"artist");
 				ir->group = wctos(v, L"group");

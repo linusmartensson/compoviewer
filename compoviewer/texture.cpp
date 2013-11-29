@@ -16,18 +16,23 @@ void texture::bind(int slot, std::string name){
 	}
 	glBindTexture(GL_TEXTURE_2D, id);
 }
-void texture::set(int internalformat, int dataformat, int datatype, int w, int h, void *data){
+void texture::set(int internalformat, int dataformat, int datatype, int w, int h, void *data, bool full){
 	bind(-1, "");
 	this->internalformat = internalformat;
 	this->dataformat = dataformat;
 	this->datatype = datatype;
-	this->w = w;
-	this->h = h;
-	glTexImage2D(GL_TEXTURE_2D, 0, internalformat, w, h, 0, dataformat, datatype, data);
-	if(data != 0){
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glGenerateMipmap(GL_TEXTURE_2D);
+	
+	if(w == this->w && h == this->h && !full){
+		glTexImage2D(GL_TEXTURE_2D, 0, internalformat,w,h, 0,dataformat,datatype,data);
+	} else {
+		this->w = w;
+		this->h = h;
+		glTexImage2D(GL_TEXTURE_2D, 0, internalformat, w, h, 0, dataformat, datatype, data);
+		if(data != 0 && full){
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
 	}
 }
 

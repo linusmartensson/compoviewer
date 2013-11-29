@@ -123,6 +123,8 @@ int transitionrenderer::operator()(renderer *pr, int width, int height, double l
 		BASS_ChannelStop(audio);
 		play = false;
 	}
-	
+	if(ret != 0){
+		bye(ret);
+	}
 	return ret;
 }

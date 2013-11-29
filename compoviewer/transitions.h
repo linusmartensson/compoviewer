@@ -40,6 +40,9 @@ public:
 
 	int operator()(renderer *pr, int width, int height, double localtime, double prevtime, bool first);
 	int go;
+
+	virtual void bye(unsigned int) {};
+
 	void key(int key,int scancode,int action,int mods){
 		if(key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
 			go = -1;

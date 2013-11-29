@@ -19,7 +19,7 @@ public:
 	texture();
 	texture(GLuint id);
 	void bind(int slot, std::string name="");
-	void set(int internalformat, int dataformat, int datatype, int w, int h, void *data=0);
+	void set(int internalformat, int dataformat, int datatype, int w, int h, void *data=0, bool full = true);
 };
 
 class framebuffer{
