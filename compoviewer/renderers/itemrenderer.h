@@ -168,10 +168,12 @@ struct itemrenderer : public transitionrenderer {
 		dx = sx;
 		while(iss.getline(str, 2048)){
 			sth_draw_text(c->stash, 3,35, dx,dy,str,&dx);
+			dy -= lh*0.75f;
+			dx = sx;
 		}
 
 		dx = sx;
-		dy = height-650.f;
+		dy = height-660.f;
 		
 		sth_draw_text(c->stash, 3,35, dx,dy,previous.c_str(),&dx);
 
