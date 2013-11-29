@@ -288,8 +288,8 @@ vec3 final = vec3(0.0);
 	
 	//vec2 pp = (vec2(uv.x-0.735,uv.y))*vec2(iResolution.x/iResolution.y,1.0)*vec2(1.0/(sponsor_res.x/sponsor_res.y),1.0)*15.0;
 	vec2 pp = (uv-vec2(-0.025,0.025))*vec2(1.0,sponsor_res.x/sponsor_res.y)*vec2(3.0)-vec2(1.0*2.0,0.0);
-	vec3 s = texture(sponsor, clamp(pp,vec2(0.0),vec2(1.0))*vec2(1.0,-1.0),-2.0).rgb;
-	final = mix(final, s, step(0.0,pp.y)*(1.0-step(1.0,pp.y))*step(0.0,pp.x)*(1.0-step(1.0,pp.x)));
+	vec4 s = texture(sponsor, clamp(pp,vec2(0.0),vec2(1.0))*vec2(1.0,-1.0),-2.0);
+	final = mix(final, s.rgb, s.a*step(0.0,pp.y)*(1.0-step(1.0,pp.y))*step(0.0,pp.x)*(1.0-step(1.0,pp.x)));
 	
 	c = vec4(final,1.0);
 	

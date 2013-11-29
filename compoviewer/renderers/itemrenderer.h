@@ -49,8 +49,8 @@ struct itemrenderer : public transitionrenderer {
 			std::cout<<"Loading sponsor file"<<std::endl;
 			sponsor = texture::load(sponsor_file);
 		} else {
-			unsigned int i = 0xffffff;
-			sponsor->set(GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, 1, 1, &i);
+			unsigned int i = 0;
+			sponsor->set(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, 1, 1, &i);
 		}
 
 		texttexture = new texture(c->stash->tex);
