@@ -25,3 +25,4 @@ Release/
 *.user
 compoviewer/submissions/
 *entries.json
+*.dat
