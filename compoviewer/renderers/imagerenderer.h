@@ -12,7 +12,7 @@ struct imagerenderer : public transitionrenderer {
 	program* subinit(){
 		endtimehint = 15.5;
 		tex = texture::load(filename);
-		tex->bind(-1, "");
+		tex->bind(-1);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, interpolation);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, interpolation);
 
@@ -73,7 +73,7 @@ struct imagerenderer : public transitionrenderer {
 
 
 		program::getuniform("image_resolution")->set(tw,th);
-		tex->bind(0, "tex");
+		program::getuniform("tex")->set(tex,0);
 		p->update();
 		arr->update();
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); 

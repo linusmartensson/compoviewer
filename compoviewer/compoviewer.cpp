@@ -82,11 +82,8 @@ struct renderer_start : public transitionrenderer{
 			audiotex->set(GL_R32F, GL_RED, GL_FLOAT, 512, 1, idata);
 			
 			audiostex->set(GL_R32F, GL_RED, GL_FLOAT, 512, 1, sdata);
-			audiotex->bind(1, "iChannel0");
-			
-			audiostex->bind(2, "iChannel1");
-			
-			
+			program::getuniform("iChannel0")->set(audiotex, 1);
+			program::getuniform("iChannel1")->set(audiostex, 2);
 		}
 
 		glViewport(0,0, width, height);
@@ -97,8 +94,7 @@ struct renderer_start : public transitionrenderer{
 		program::getuniform("iResolution")->set((float)width,(float)height);
 		program::getuniform("iGlobalTime")->set((float)localtime);
 		fss->run();
-		
-		texttexture->bind(0, "tex");
+		program::getuniform("tex")->set(texttexture, 0);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dx = sx = (float)width/10.f; 
@@ -108,7 +104,6 @@ struct renderer_start : public transitionrenderer{
 		program::uniforms["resolution"]->set((float)width, (float)height);
 		c->stash->drawfunc = [&](int v){
 			p->update();
-			texttexture->bind(0, "tex");
 			buf->subset(0, c->stash->nverts*VERT_STRIDE, c->stash->verts);
 			arr->update();
 			glDrawArrays(GL_TRIANGLES, 0, c->stash->nverts);
@@ -168,7 +163,7 @@ struct renderer_end : public transitionrenderer {
 		program::getuniform("iGlobalTime")->set((float)localtime);
 		fss->run();
 
-		texttexture->bind(0, "tex");
+		program::getuniform("tex")->set(texttexture, 0);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		dx = sx = (float)width/30.f; 
@@ -178,7 +173,6 @@ struct renderer_end : public transitionrenderer {
 		program::uniforms["resolution"]->set((float)width, (float)height);
 		c->stash->drawfunc = [&](int v){
 			p->update();
-			texttexture->bind(0, "tex");
 			buf->subset(0, c->stash->nverts*VERT_STRIDE, c->stash->verts);
 			arr->update();
 			glDrawArrays(GL_TRIANGLES, 0, c->stash->nverts);

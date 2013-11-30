@@ -60,8 +60,8 @@ int transition::run(program *trans, renderer *pre, renderer *post, int width, in
 	int state = (*post)(0, width, height, posttime, 0, first);
 	framebuffer::exit();
 
-	pret->bind(0, "texture_pre");
-	postt->bind(1, "texture_post");
+	program::getuniform("texture_pre")->set(pret,0);
+	program::getuniform("texture_post")->set(postt,1);
 	program::getuniform("time")->set((float)transitiontime);
 	arr->update();
 	trans->update();

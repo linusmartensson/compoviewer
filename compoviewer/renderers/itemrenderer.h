@@ -82,7 +82,8 @@ struct itemrenderer : public transitionrenderer {
 	
 	int run(int width, int height, double localtime, bool first){
 	
-		texttexture->bind(0, "tex");
+		
+		program::getuniform("tex")->set(texttexture, 0);
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glEnable(GL_BLEND);
@@ -106,9 +107,8 @@ struct itemrenderer : public transitionrenderer {
 				sdata[i]=(sdata[i]+idata[i]);
 			}
 			
-			audiotex->bind(0, "iChannel0");
-			
-			audiostex->bind(1, "iChannel1");
+			program::getuniform("iChannel0")->set(audiotex, 0);
+			program::getuniform("iChannel1")->set(audiostex, 1);
 			
 			audiotex->set(GL_R32F, GL_RED, GL_FLOAT, 512, 1, idata);
 			
@@ -127,7 +127,7 @@ struct itemrenderer : public transitionrenderer {
 
 		program::getuniform("hassponsor")->set((float)hassponsor);
 		program::getuniform("sponsor_res")->set((float)sponsor->w, (float)sponsor->h);
-		sponsor->bind(2, "sponsor");
+		program::getuniform("sponsor")->set(sponsor, 2);
 
 		glEnable(GL_BLEND);
 		glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
@@ -142,7 +142,6 @@ struct itemrenderer : public transitionrenderer {
 		program::uniforms["resolution"]->set((float)width, (float)height);
 		c->stash->drawfunc = [&](int v){
 			p->update();
-			texttexture->bind(0, "tex");
 			buf->subset(0, c->stash->nverts*VERT_STRIDE, c->stash->verts);
 			arr->update();
 			glDrawArrays(GL_TRIANGLES, 0, c->stash->nverts);

@@ -31,13 +31,23 @@ public:
 	uniform* u;
 };
 
+class texture;
+
 class uniform{
 public:
 	std::string name;
 	void *value;
+	texture *aux;
 	int type;
 	std::set<uniformconfig *> configs;
-	uniform() : type(GL_ZERO), value(0) {}
+	uniform() : type(GL_ZERO), value(0), aux(0) {}
+
+	void set(texture *t, int slot){
+		*(GLuint*)value = slot;
+		aux = t;
+		touched();
+	}
+
 	template<typename T>
 	void set(T t){
 		if(value == 0 || *(T*)value == t) return;

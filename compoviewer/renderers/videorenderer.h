@@ -67,7 +67,7 @@ struct videorenderer : public transitionrenderer {
 			play = true;
 			unsigned int i=0;
 			tex->set(GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, 1, 1, &i);
-			tex->bind(-1,"");
+			tex->bind(-1);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
@@ -115,7 +115,7 @@ struct videorenderer : public transitionrenderer {
 
 		program::getuniform("pitchscale")->set(vc->width/(vc->pitch/4.f));
 		program::getuniform("image_resolution")->set(tw,th);
-		tex->bind(0, "tex");
+		program::getuniform("tex")->set(tex,0);
 		p->update();
 		arr->update();
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); 

@@ -2,6 +2,7 @@
 #include"core.h"
 #include<iostream>
 #include<string>
+#include"texture.h"
 program::program(GLuint &p) : p(p) {}
 std::map<std::string, attribute*> program::attribs;
 std::map<std::string, uniform*> program::uniforms;
@@ -232,6 +233,7 @@ void program::bind(){
 void program::update(){
 	bind();
 	std::for_each(uniformconfigs.begin(),uniformconfigs.end(),[&](uniformconfig *uc){
+		if(uc->u->aux != 0) uc->u->aux->bind(*(GLuint*)(uc->u->value));
 		if(!uc->touched) return;
 		auto &value = uc->u->value;
 		auto &pos = uc->pos;

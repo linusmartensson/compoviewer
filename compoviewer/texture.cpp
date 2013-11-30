@@ -9,15 +9,13 @@ texture::texture() : w(-1), h(-1) {
 }
 texture::texture(GLuint id) : w(-1), h(-1), id(id) {}
 
-void texture::bind(int slot, std::string name){
-	if(slot >= 0){
+void texture::bind(int slot){
+	if(slot >= 0)
 		glActiveTexture(slot+GL_TEXTURE0);
-		program::getuniform(name)->set(slot);
-	}
 	glBindTexture(GL_TEXTURE_2D, id);
 }
 void texture::set(int internalformat, int dataformat, int datatype, int w, int h, void *data, bool full){
-	bind(-1, "");
+	bind(-1);
 	this->internalformat = internalformat;
 	this->dataformat = dataformat;
 	this->datatype = datatype;

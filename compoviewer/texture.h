@@ -18,7 +18,7 @@ public:
 
 	texture();
 	texture(GLuint id);
-	void bind(int slot, std::string name="");
+	void bind(int slot);
 	void set(int internalformat, int dataformat, int datatype, int w, int h, void *data=0, bool full = true);
 };
 
