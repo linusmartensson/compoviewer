@@ -3,8 +3,6 @@
 #include"../core.h"
 #include"../fontstash.h"
 
-#include<GLFW/glfw3.h>
-
 struct itemrenderer : public transitionrenderer {
 	program *p;
 	buffer *buf;
@@ -47,7 +45,7 @@ struct itemrenderer : public transitionrenderer {
 
 		
 		if(sponsor_file != ""){
-			std::cout<<"Loading sponsor file"<<std::endl;
+			std::cout<<"Loading sponsor!"<<std::endl;
 			sponsor = texture::load(sponsor_file);
 			hassponsor = 1.0;
 		} else {
@@ -132,7 +130,7 @@ struct itemrenderer : public transitionrenderer {
 		glEnable(GL_BLEND);
 		glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ZERO, GL_ONE);
 		program::getuniform("iResolution")->set((float)width, (float)height);
-		program::getuniform("iGlobalTime")->set((float)glfwGetTime());
+		program::getuniform("iGlobalTime")->set((float)c->globalTime());
 		fss->run();
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

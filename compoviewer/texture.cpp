@@ -1,6 +1,8 @@
 #include"texture.h"
 #include"shaders.h"
 #include"lodepng.h"
+#include<iostream>
+#include"core.h"
 
 std::vector<framebuffer*> framebuffer::fbstack;
 
@@ -37,7 +39,10 @@ void texture::set(int internalformat, int dataformat, int datatype, int w, int h
 texture *texture::load(std::string filename){
 	auto tex = new texture();
 	std::vector<unsigned char> data;
-	lodepng::decode(data, tex->w, tex->h, filename);
+	if(lodepng::decode(data, tex->w, tex->h, filename)){
+		std::cerr<<"Could not decode "<<filename<<", file missing or corrupt!"<<std::endl;
+		core::die();
+	}
 	tex->set(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, tex->w, tex->h, &data[0]);
 	return tex;
 }

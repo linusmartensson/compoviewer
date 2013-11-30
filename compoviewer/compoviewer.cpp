@@ -22,7 +22,7 @@
 #include<algorithm>
 
 #include"shaders.h"
-#include"core.h"
+#include"glfwcore.h"
 #include"renderer.h"
 #include"JSON.h"
 #include"transitions.h"
@@ -218,7 +218,7 @@ static std::string wctos(JSONValue *v, const wchar_t *str){
 }
 
 int main(int argc, char* argv[]){
-	core *c = new core;
+	core *c = new glfwcore;
 	
 	renderer_end *e = 0;
 	JSONValue *efile = JSON::Parse(core::getfile("entries.json").c_str());

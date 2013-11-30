@@ -4,6 +4,7 @@
 #include"shaders.h"
 #include"renderer.h"
 #include<bass.h>
+#include"core.h"
 
 struct transition {
 
@@ -16,7 +17,7 @@ struct transition {
 	transition();
 	int run(program *trans, renderer *pre, renderer *post, int width, int height, double pretime, double posttime, double transitiontime, bool first);
 };
-#include<GLFW/glfw3.h>
+
 class transitionrenderer : public renderer {
 	transition *trans;
 	program *transprogram;
@@ -44,9 +45,9 @@ public:
 	virtual void bye(unsigned int) {};
 
 	void key(int key,int scancode,int action,int mods){
-		if(key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+		if(key == c->previousItemKey() && action == c->actionKey()) {
 			go = -1;
-		} else if(key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+		} else if(key == c->nextItemKey() && action == c->actionKey()) {
 			go = 1;
 		}
 	}

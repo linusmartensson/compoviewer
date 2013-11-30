@@ -2,8 +2,9 @@
 #include"renderer.h"
 #include<string>
 
-struct GLFWwindow;
 struct sth_stash;
+
+#include"fontstash.h"
 
 class core{
 public:
@@ -17,20 +18,23 @@ public:
 		
 	};
 
+	virtual int previousItemKey() = 0;
+	virtual int nextItemKey() = 0;
+	virtual int actionKey() = 0;
+	virtual double globalTime() = 0;
+	
 	int width, height;
-
 	static renderer *current;
 	static renderer *previous;
-	GLFWwindow *w;
-	
 	sth_stash *stash;
 
 	static void die();
 	static std::string getfile(std::string path);
 	static std::wstring wgetfile(std::string path);
 
-	core();
-	void run();
+	virtual void run() = 0;
+	virtual ~core(){}
+
 };
 
 class renderer_shutdown : public renderer {

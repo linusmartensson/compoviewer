@@ -1,4 +1,4 @@
-#include"core.h"
+#include"glfwcore.h"
 #include"fontstash.h"
 #include"renderer.h"
 
@@ -16,6 +16,18 @@
 renderer *core::current = 0;
 renderer *core::previous = 0;
 
+int glfwcore::previousItemKey(){
+	return GLFW_KEY_LEFT;
+}
+int glfwcore::nextItemKey(){
+	return GLFW_KEY_RIGHT;
+}
+int glfwcore::actionKey(){
+	return GLFW_PRESS;
+}
+double glfwcore::globalTime(){
+	return glfwGetTime();
+}
 static void error_callback(int error, const char* description){
 	glfwTerminate();
 	std::cout<<description<<std::endl;
@@ -37,7 +49,7 @@ static std::string wctos(JSONValue *v, const wchar_t *str){
 	return tmp;
 }
 
-core::core() {
+glfwcore::glfwcore() {
 
 	std::wstring conf = wgetfile("test.json");
 	JSONValue *config = JSON::Parse(conf.c_str());
@@ -112,7 +124,7 @@ std::wstring core::wgetfile(std::string path){
 	return text;
 }
 
-void core::run(){
+void glfwcore::run(){
 	double switchTime = glfwGetTime();
 	double prevTime = switchTime;
 	bool first = true;

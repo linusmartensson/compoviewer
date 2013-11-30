@@ -38,8 +38,15 @@ public:
 		}
 
 		media = libvlc_media_new_path(libvlc, filename.c_str());
+		if(media == 0){
+			std::cerr<<"Could not load video file "<<filename<<"!"<<std::endl;
+			core::die();
+		}
 		mediaplayer = libvlc_media_player_new_from_media(media);
-		
+		if(mediaplayer == 0){
+			std::cerr<<"Could not create media player for video file "<<filename<<"!"<<std::endl;
+			core::die();
+		}
 		
 		libvlc_video_set_callbacks(mediaplayer, lock, unlock, display, this);
 		libvlc_video_set_format_callbacks(mediaplayer, setup, cleanup);
@@ -47,7 +54,7 @@ public:
 		libvlc_media_parse(media);
 
 		length = libvlc_media_get_duration(media);
-		std::cout<<length<<std::endl;
+		std::cout<<"Video length in ms: "<<length<<std::endl;
 		
 
 		libvlc_media_release(media);

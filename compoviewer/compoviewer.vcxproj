@@ -97,6 +97,7 @@
     <ClInclude Include="renderers\imagerenderer.h" />
     <ClInclude Include="renderers\itemrenderer.h" />
     <ClInclude Include="renderers\videorenderer.h" />
+    <ClInclude Include="glfwcore.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="stb_truetype.h" />
@@ -106,7 +107,7 @@
   <ItemGroup>
     <ClCompile Include="buffers.cpp" />
     <ClCompile Include="compoviewer.cpp" />
-    <ClCompile Include="core.cpp" />
+    <ClCompile Include="glfwcore.cpp" />
     <ClCompile Include="fontstash.cpp" />
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="JSONValue.cpp" />
