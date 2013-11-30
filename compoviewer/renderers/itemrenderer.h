@@ -78,6 +78,7 @@ struct itemrenderer : public transitionrenderer {
 		return program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("transition2.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders)));
 	}
 	
+	float data[512];
 	
 	int run(int width, int height, double localtime, bool first){
 	
@@ -93,10 +94,12 @@ struct itemrenderer : public transitionrenderer {
 			if(first) {
 				memset(idata, 0, sizeof(idata));
 				memset(sdata, 0, sizeof(sdata));
+				memset(data, 0, sizeof(data));
 				ldata[0] = ldata[1] = lsdata[0] = lsdata[1] = 0.f;
 			}
-			float data[512];
-			BASS_ChannelGetData(audio, data, BASS_DATA_FFT1024);
+			
+			if(localtime < (audiolength+delay) && localtime > delay)
+				BASS_ChannelGetData(audio, data, BASS_DATA_FFT1024);
 			
 			for(int i=0;i<512;++i){
 				idata[i]=idata[i]*0.97f>data[i]?idata[i]*0.97f:data[i];
@@ -111,7 +114,6 @@ struct itemrenderer : public transitionrenderer {
 			
 			audiostex->set(GL_R32F, GL_RED, GL_FLOAT, 512, 1, sdata);
 			
-
 			auto level = BASS_ChannelGetLevel(audio);
 			if(level != -1){
 				ldata[0] = ldata[0]*0.97f>LOWORD(level)/32768.f?ldata[0]*0.97f:LOWORD(level)/32768.f;
