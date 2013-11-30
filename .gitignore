@@ -24,5 +24,4 @@ Release/
 *.log
 *.user
 compoviewer/submissions/
-*entries.json
 *.dat
