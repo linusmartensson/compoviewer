@@ -13,8 +13,6 @@
 
 #include<bass.h>
 
-renderer *core::current = 0;
-renderer *core::previous = 0;
 
 int glfwcore::previousItemKey(){
 	return GLFW_KEY_LEFT;
@@ -87,66 +85,14 @@ glfwcore::glfwcore() {
 	glewExperimental = true;
 	if(glewInit() != GL_NO_ERROR) exit(1);
 
-	stash = sth_create(1024,1024);
-	if(!(stash && sth_add_font(stash, 0, "resources/DroidSerif-Regular.ttf"))) die();
-	if(!(stash && sth_add_font(stash, 1, "resources/DroidSerif-Italic.ttf"))) die();
-	if(!(stash && sth_add_font(stash, 2, "resources/DreamHack Normal.ttf"))) die();
-	if(!(stash && sth_add_font(stash, 3, "resources/Eurostile LT Medium.ttf"))) die();
+
+	initGLFonts();
 }
 
-void core::die(){
-	glfwTerminate();
-	exit(1);
+bool glfwcore::dying(){
+	return glfwWindowShouldClose(w)!=0;
 }
-
-std::string core::getfile(std::string path){
-	std::string text;
-	std::ifstream ifs("resources/"+path);
-	char str[8192];
-	while(ifs.getline(str, 8192)){
-		text += std::string(str)+"\n";
-	}
-	ifs.close();
-	return text;
-}
-std::wstring core::wgetfile(std::string path){
-	std::wstring text;
-	std::wifstream ifs("resources/"+path);
-	if(ifs.peek() == (wchar_t)0xEF){
-		wchar_t w;
-		ifs>>w>>w>>w;
-	}
-	wchar_t str[8192];
-	while(ifs.getline(str, 8192)){
-		text += std::wstring(str)+L"\n";
-	}
-	ifs.close();
-	return text;
-}
-
-void glfwcore::run(){
-	double switchTime = glfwGetTime();
-	double prevTime = switchTime;
-	bool first = true;
-	while(!glfwWindowShouldClose(w)){
-		double t = glfwGetTime();
-		int ret = (*core::current)(
-			core::previous, width, height, t-switchTime, t-prevTime, first);
-		first = false;
-		if(ret != 0) {
-			prevTime = switchTime;
-			switchTime = glfwGetTime();
-			core::previous = core::current;
-			if(ret > 0 && core::current->next != 0) {
-				core::current = core::current->next;
-				first = true;
-			} else if(ret < 0 && core::current->prev != 0) {
-				core::current = core::current->prev;
-				first = true;
-			}
-		}
-		glfwSwapBuffers(w);
-		glfwPollEvents();
-	}
-	exit(0);
+void glfwcore::swapBuffers(){
+	glfwSwapBuffers(w);
+	glfwPollEvents();
 }

@@ -4,7 +4,7 @@
 
 struct GLFWwindow;
 
-class glfwcore : public core{
+class imemcore : public core{
 public:
 
 	virtual int previousItemKey();
@@ -15,9 +15,9 @@ public:
 	GLFWwindow *w;
 
 	
-	glfwcore();
-	virtual ~glfwcore(){}
-	
+	imemcore();
+	virtual ~imemcore(){}
+
 	virtual bool dying();
 	virtual void swapBuffers();
 };

@@ -101,12 +101,14 @@
     <ClInclude Include="texture.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="stb_truetype.h" />
+    <ClInclude Include="imemcore.h" />
     <ClInclude Include="transitions.h" />
-    <ClInclude Include="videocore.h" />
+    <ClInclude Include="videoinput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buffers.cpp" />
     <ClCompile Include="compoviewer.cpp" />
+    <ClCompile Include="core.cpp" />
     <ClCompile Include="glfwcore.cpp" />
     <ClCompile Include="fontstash.cpp" />
     <ClCompile Include="JSON.cpp" />
@@ -115,8 +117,9 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="shaders.cpp" />
+    <ClCompile Include="imemcore.cpp" />
     <ClCompile Include="transitions.cpp" />
-    <ClCompile Include="videocore.cpp" />
+    <ClCompile Include="videoinput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="resources\DreamHack Normal.ttf" />

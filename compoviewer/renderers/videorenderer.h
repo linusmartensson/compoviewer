@@ -3,7 +3,7 @@
 #include "../core.h"
 
 
-#include"../videocore.h"
+#include"../videoinput.h"
 
 
 struct videorenderer : public transitionrenderer {
@@ -13,11 +13,11 @@ struct videorenderer : public transitionrenderer {
 	texture *tex;
 	GLuint interpolation;
 	std::string filename;
-	videocore *vc;
+	videoinput *vc;
 	program* subinit(){
 		
 		tex = new texture;
-		vc = new videocore(filename);
+		vc = new videoinput(filename);
 		endtimehint = vc->length/1000.f+2.f*delay;
 //		tex->set(GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, 1280,720, ...);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, interpolation);

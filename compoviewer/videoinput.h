@@ -1,5 +1,4 @@
-#ifndef _VIDEOCORE_H
-#define _VIDEOCORE_H
+#pragma once
 
 #include "core.h"
 #include <vlc/libvlc.h>
@@ -9,7 +8,7 @@
 
 #define VIDEOBUFFERS 4
 
-struct videocore{
+struct videoinput{
 	struct dataStorage{
 		unsigned int* data;
 		volatile bool lock;
@@ -28,7 +27,7 @@ public:
 	int width, height, lines, pitch;
 	int64_t length;
 
-	videocore(std::string filename) : width(-1), height(-1) {
+	videoinput(std::string filename) : width(-1), height(-1) {
 
 		libvlc = libvlc_new(0, NULL);
 
@@ -70,7 +69,7 @@ public:
 		libvlc_media_player_stop(mediaplayer);
 	}
 
-	~videocore(void)
+	~videoinput(void)
 	{
 		libvlc_media_player_stop(mediaplayer);
 		libvlc_media_player_release(mediaplayer);
@@ -102,7 +101,7 @@ public:
 		unsigned *width, unsigned *height, 
 		unsigned *pitches, unsigned *lines){
 
-			videocore *thiz = (videocore*)*opaque;
+			videoinput *thiz = (videoinput*)*opaque;
 
 			thiz->width = *width;
 			thiz->height = *height;
@@ -182,6 +181,3 @@ public:
 
 
 };
-
-#endif // _VIDEOCORE_H
-

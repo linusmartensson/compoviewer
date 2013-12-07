@@ -57,10 +57,13 @@
     <ClInclude Include="renderers\videorenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="videocore.h">
+    <ClInclude Include="glfwcore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="glfwcore.h">
+    <ClInclude Include="imemcore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="videoinput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,10 +98,16 @@
     <ClCompile Include="compoviewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="videocore.cpp">
+    <ClCompile Include="glfwcore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glfwcore.cpp">
+    <ClCompile Include="videoinput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imemcore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

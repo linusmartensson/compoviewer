@@ -27,14 +27,17 @@ public:
 	static renderer *current;
 	static renderer *previous;
 	sth_stash *stash;
-
+	void initGLFonts();
+	void run();
+	
 	static void die();
 	static std::string getfile(std::string path);
 	static std::wstring wgetfile(std::string path);
 
-	virtual void run() = 0;
 	virtual ~core(){}
 
+	virtual bool dying() = 0;
+	virtual void swapBuffers() = 0;
 };
 
 class renderer_shutdown : public renderer {
