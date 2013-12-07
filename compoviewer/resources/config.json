@@ -3,5 +3,6 @@
 	"width"			: 1280,
 	"height"		: 720,
 	"vsync"			: true,
-	"refreshrate"	: 60
+	"refreshrate"	: 60,
+	"player"		: "imem"
 }

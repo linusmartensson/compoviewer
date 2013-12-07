@@ -6,13 +6,8 @@
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
 
-#include"JSON.h"
-
 #include<iostream>
 #include<fstream>
-
-#include<bass.h>
-
 
 int glfwcore::previousItemKey(){
 	return GLFW_KEY_LEFT;
@@ -41,28 +36,8 @@ static double cx = 0.0, cy = 0.0;
 static void move_callback(GLFWwindow *window, double x, double y){core::current->move(x-cx, y-cy);cx = x;cy = y;}
 
 
-static char tmp[8192];
-static std::string wctos(JSONValue *v, const wchar_t *str){
-	std::wcstombs(tmp, v->Child(str)->AsString().c_str(), 8192);
-	return tmp;
-}
-
-glfwcore::glfwcore() {
-
-	std::wstring conf = wgetfile("test.json");
-	JSONValue *config = JSON::Parse(conf.c_str());
-
-	if(!BASS_Init(-1,48000,BASS_DEVICE_SPEAKERS,0,0))
-	{
-		std::cerr<<"Unable to initialize sound! Maybe already initialized?"<<std::endl;
-		die();
-
-	}
-
-	width = config->Child(L"width")->AsNumber();
-	height = config->Child(L"height")->AsNumber();
-	bool fullscreen = config->Child(L"fullscreen")->AsBool();
-
+void glfwcore::subinit() {
+	
 	if(!glfwInit()) exit(1);
 	auto s = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	glfwSetErrorCallback(&error_callback);
@@ -80,13 +55,10 @@ glfwcore::glfwcore() {
 	if(!fullscreen)
 		glfwSetWindowPos(w, (s->width-width)/2, (s->height-height)/2);
 	else
-		glfwSwapInterval(config->Child(L"vsync")->AsBool()?1:0);
+		glfwSwapInterval(vsync?1:0);
 
 	glewExperimental = true;
 	if(glewInit() != GL_NO_ERROR) exit(1);
-
-
-	initGLFonts();
 }
 
 bool glfwcore::dying(){

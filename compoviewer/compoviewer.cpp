@@ -23,6 +23,7 @@
 
 #include"shaders.h"
 #include"glfwcore.h"
+#include"imemcore.h"
 #include"renderer.h"
 #include"JSON.h"
 #include"transitions.h"
@@ -218,8 +219,20 @@ static std::string wctos(JSONValue *v, const wchar_t *str){
 }
 
 int main(int argc, char* argv[]){
-	core *c = new glfwcore;
+
+	core *tc = new tempcore;
+
+	core *c = 0;
 	
+	if(tc->requestedPlayer == "imem")
+		c = new imemcore;
+	else if(tc->requestedPlayer == "glfw")
+		c = new glfwcore;
+
+	if(!c) core::die();
+
+	c->init();
+
 	renderer_end *e = 0;
 	JSONValue *efile = JSON::Parse(core::getfile("entries.json").c_str());
 	auto compos= efile->AsArray();

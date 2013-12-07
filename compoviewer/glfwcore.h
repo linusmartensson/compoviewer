@@ -14,10 +14,9 @@ public:
 
 	GLFWwindow *w;
 
-	
-	glfwcore();
 	virtual ~glfwcore(){}
 	
 	virtual bool dying();
 	virtual void swapBuffers();
+	virtual void subinit();
 };

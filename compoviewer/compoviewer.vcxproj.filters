@@ -126,7 +126,6 @@
     <None Include="resources\item_text.vert" />
     <None Include="resources\item_text.frag" />
     <None Include="resources\entries.json" />
-    <None Include="resources\test.json" />
     <None Include="resources\item_image.frag" />
     <None Include="resources\transition_test.vert" />
     <None Include="resources\transition_test.frag" />
@@ -137,5 +136,6 @@
     <None Include="resources\presentation2.frag" />
     <None Include="resources\audiobeamer.frag" />
     <None Include="resources\item_video.frag" />
+    <None Include="resources\config.json" />
   </ItemGroup>
 </Project>

@@ -142,7 +142,7 @@
     <None Include="resources\transition2.frag" />
     <None Include="resources\transition_test.frag" />
     <None Include="resources\test.frag" />
-    <None Include="resources\test.json" />
+    <None Include="resources\config.json" />
     <None Include="resources\test.vert" />
     <None Include="resources\item_text.frag" />
     <None Include="resources\item_text.vert" />

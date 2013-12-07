@@ -1,12 +1,22 @@
 #include"core.h"
+#include"JSON.h"
 #include<fstream>
 #include<string>
+#include<iostream>
+#include<bass.h>
+
 
 renderer *core::current = 0;
 renderer *core::previous = 0;
 
 void core::die(){
 	exit(1);
+}
+
+static char tmp[8192];
+static std::string wctos(JSONValue *v, const wchar_t *str){
+	std::wcstombs(tmp, v->Child(str)->AsString().c_str(), 8192);
+	return tmp;
 }
 
 std::string core::getfile(std::string path){
@@ -42,6 +52,19 @@ void core::initGLFonts(){
 	if(!(stash && sth_add_font(stash, 3, "resources/Eurostile LT Medium.ttf"))) die();
 }
 
+void core::readConfig(){
+	std::wstring conf = wgetfile("config.json");
+	JSONValue *config = JSON::Parse(conf.c_str());
+	width = config->Child(L"width")->AsNumber();
+	height = config->Child(L"height")->AsNumber();
+	fullscreen = config->Child(L"fullscreen")->AsBool();
+	vsync = config->Child(L"vsync")->AsBool();
+	requestedPlayer = wctos(config, L"player");
+}
+core::core(){
+	readConfig();
+}
+
 void core::run(){
 	double switchTime = globalTime();
 	double prevTime = switchTime;
@@ -65,4 +88,13 @@ void core::run(){
 		swapBuffers();
 	}
 	exit(0);
+}
+
+void core::init(){
+	if(!BASS_Init(-1,48000,BASS_DEVICE_SPEAKERS,0,0)){
+		std::cerr<<"Unable to initialize sound! Maybe already initialized?"<<std::endl;
+		die();
+	}
+	subinit();
+	initGLFonts();
 }

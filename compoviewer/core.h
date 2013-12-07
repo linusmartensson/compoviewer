@@ -22,22 +22,39 @@ public:
 	virtual int nextItemKey() = 0;
 	virtual int actionKey() = 0;
 	virtual double globalTime() = 0;
+	virtual void subinit() = 0;
+	
+	void init();
 	
 	int width, height;
+	bool vsync, fullscreen;
 	static renderer *current;
 	static renderer *previous;
+	std::string requestedPlayer;
 	sth_stash *stash;
 	void initGLFonts();
+	void readConfig();
 	void run();
 	
 	static void die();
 	static std::string getfile(std::string path);
 	static std::wstring wgetfile(std::string path);
 
+	core();
 	virtual ~core(){}
 
 	virtual bool dying() = 0;
 	virtual void swapBuffers() = 0;
+};
+
+class tempcore : public core{
+	virtual int previousItemKey(){return 0;};
+	virtual int nextItemKey(){return 0;};
+	virtual int actionKey(){return 0;};
+	virtual double globalTime(){return 0.0;};
+	virtual void subinit(){};
+	virtual bool dying(){return true;};
+	virtual void swapBuffers(){};
 };
 
 class renderer_shutdown : public renderer {
