@@ -66,6 +66,9 @@
     <ClInclude Include="videoinput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Visual Studio 2012\Projects\ConsoleApplication1\ConsoleApplication1\include\xmp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fontstash.cpp">
@@ -122,7 +125,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\test.vert" />
-    <None Include="resources\test.frag" />
     <None Include="resources\item_text.vert" />
     <None Include="resources\item_text.frag" />
     <None Include="resources\entries.json" />
@@ -130,12 +132,13 @@
     <None Include="resources\transition_test.vert" />
     <None Include="resources\transition_test.frag" />
     <None Include="resources\item_image.vert" />
-    <None Include="resources\beamer.frag" />
     <None Include="resources\presentation.frag" />
     <None Include="resources\transition2.frag" />
     <None Include="resources\presentation2.frag" />
     <None Include="resources\audiobeamer.frag" />
     <None Include="resources\item_video.frag" />
     <None Include="resources\config.json" />
+    <None Include="resources\test.frag" />
+    <None Include="resources\temp\entries.json" />
   </ItemGroup>
 </Project>

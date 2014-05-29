@@ -1,8 +1,10 @@
 
 #pragma comment(lib, "OpenGL32.lib")
 #pragma comment(lib, "deps/bass.lib")
+#pragma comment(lib, "deps/BASSMOD.lib")
 #pragma comment(lib, "deps/libvlc.lib")
 #pragma comment(lib, "deps/libvlccore.lib")
+#pragma comment(lib, "deps/libxmp.lib")
 #define _CRT_SECURE_NO_WARNINGS
 #ifndef NDEBUG
 #pragma comment(lib, "deps/Debug/glfw3.lib")
@@ -64,7 +66,6 @@ struct renderer_start : public transitionrenderer{
 		return program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("transition_test.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders)));
 	}
 	int run(int width, int height, double localtime, bool first){
-
 				
 		if(audio){
 			
@@ -88,7 +89,7 @@ struct renderer_start : public transitionrenderer{
 		}
 
 		glViewport(0,0, width, height);
-		glClearColor(1.0f,102/255.f,0.f,1.f);
+		glClearColor(0.98039215686f,0.34901960784f,0.0f,1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		
@@ -98,33 +99,32 @@ struct renderer_start : public transitionrenderer{
 		program::getuniform("tex")->set(texttexture, 0);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		dx = sx = (float)width/10.f; 
+		dx = sx = (float)width/30.f; 
 		dy = sy = (float)height;
 		program::getuniform("time")->set((float)localtime);
 		
-		program::uniforms["resolution"]->set((float)width, (float)height);
+		program::getuniform("resolution")->set((float)width, (float)height);
 		c->stash->drawfunc = [&](int v){
 			p->update();
 			buf->subset(0, c->stash->nverts*VERT_STRIDE, c->stash->verts);
 			arr->update();
 			glDrawArrays(GL_TRIANGLES, 0, c->stash->nverts);
 		};
-		program::uniforms["color"]->set(1.f,102/255.f,0.f,(float)localtime-1.f);
+		program::getuniform("color")->set(0.98039215686f,0.34901960784f,0.0f,(float)localtime-1.f);
 		sth_begin_draw(c->stash);
-		sth_vmetrics(c->stash, 3, 50, NULL, NULL, &lh);
-		dy = height*0.7f+lh*1.f;
-		sth_draw_text(c->stash, 3,50, dx,dy,"Next compo:",&dx);
-		sth_vmetrics(c->stash, 3, 100, NULL, NULL, &lh);
-		dx = sx;
-		dy = height*0.7f-lh*0.5f;
+		dy = height*0.6f;
+		sth_draw_text(c->stash, 2,150, dx,dy,"Next compo:",&dx);
+		sth_vmetrics(c->stash, 2, 200, NULL, NULL, &lh);
+		dx = sx+100;
+		dy -= lh;
 		sth_end_draw(c->stash);
 		
-		program::getuniform("color")->set(1.f,102/255.f,0.f,(float)localtime-3.0f);
+		program::getuniform("color")->set(0.98039215686f,0.34901960784f,0.0f,(float)localtime-3.0f);
 		sth_begin_draw(c->stash);
-		sth_draw_text(c->stash, 3,100, dx,dy,title.c_str(),&dx);
+		sth_draw_text(c->stash, 2,250, dx,dy,title.c_str(),&dx);
 		sth_end_draw(c->stash);
 
-		return localtime>500.0?1:0;
+		return localtime>endtimehint?1:0;
 	}
 };
 struct renderer_end : public transitionrenderer {
@@ -171,28 +171,30 @@ struct renderer_end : public transitionrenderer {
 		dy = sy = (float)height;
 		program::getuniform("time")->set((float)localtime);
 		
-		program::uniforms["resolution"]->set((float)width, (float)height);
+		program::getuniform("resolution")->set((float)width, (float)height);
 		c->stash->drawfunc = [&](int v){
 			p->update();
 			buf->subset(0, c->stash->nverts*VERT_STRIDE, c->stash->verts);
 			arr->update();
 			glDrawArrays(GL_TRIANGLES, 0, c->stash->nverts);
 		};
-		program::uniforms["color"]->set(1.f,102/255.f,0.f,4.f-(float)localtime);
+		program::getuniform("color")->set(0.98039215686f,0.34901960784f,0.0f,4.f);
+		
 		sth_begin_draw(c->stash);
-		sth_vmetrics(c->stash, 3, 100, NULL, NULL, &lh);
-		dy = height*0.5f-lh*0.5f;
-		sth_draw_text(c->stash, 3,100, dx,dy,(std::string("End of ")+title).c_str(),&dx);
-		sth_vmetrics(c->stash, 3, 50, NULL, NULL, &lh);
+		dy = height*0.6f;
+		
+		std::ostringstream oss;
+		oss<<"End of "<<title;
+
+		sth_draw_text(c->stash, 2,150, dx,dy,"End of",&dx);
+		sth_vmetrics(c->stash, 2, 200, NULL, NULL, &lh);
+		dx = sx+100;
+		dy -= lh;
 		sth_end_draw(c->stash);
-		program::uniforms["color"]->set(1.f,102/255.f,0.f,4.0f-(float)localtime);
+		
+		program::getuniform("color")->set(0.98039215686f,0.34901960784f,0.0f,(float)localtime);
 		sth_begin_draw(c->stash);
-		dy -= lh*1.0f;
-		dx = sx;
-		sth_draw_text(c->stash, 3,50, dx,dy,std::string("Don't forget to vote!").c_str(),&dx);
-		dy -= lh*1.0f;
-		dx = sx;
-		sth_draw_text(c->stash, 3,50, dx,dy,std::string("http://kreativ.dreamhack.se").c_str(),&dx);
+		sth_draw_text(c->stash, 2,250, dx,dy,title.c_str(),&dx);
 		sth_end_draw(c->stash);
 
 		return localtime>endtimehint?1:0;
@@ -243,7 +245,9 @@ int main(int argc, char* argv[]){
 	std::for_each(compos.begin(), compos.end(), [&](JSONValue *compo){
 		previous = "";
 		auto rs = new renderer_start;
-		rs->audiotrack = "resources/kreativ_jingel.wav";
+		
+		rs->audiotrack = "";
+		if(rs->audiotrack == "") rs->endtimehint = 25.0; else rs->endtimehint = 500.0;
 		rs->delay = 0.5f;
 		
 		int category = (int)compo->Child(L"category")->AsNumber();
@@ -353,6 +357,14 @@ int main(int argc, char* argv[]){
 
 				//Render audio
 				ir->audiotrack = "submissions/"+wctos(v, L"filename");
+				ir->tracked = false;
+				
+				ir->delay = 2.0;
+			} else if(category == core::CATEGORY_TRACKED_AUDIO){
+
+				//Render audio
+				ir->audiotrack = "submissions/"+wctos(v, L"filename");
+				ir->tracked = true;
 				ir->delay = 2.0;
 			}
 			

@@ -43,6 +43,7 @@ public:
 	uniform() : type(GL_ZERO), value(0), aux(0) {}
 
 	void set(texture *t, int slot){
+		if(type == GL_ZERO) return;
 		*(GLuint*)value = slot;
 		aux = t;
 		touched();
@@ -50,12 +51,14 @@ public:
 
 	template<typename T>
 	void set(T t){
+		if(type == GL_ZERO) return;
 		if(value == 0 || *(T*)value == t) return;
 		*(T*)value = t;
 		touched();
 	}
 	template<typename T>
 	void set(T t, T t2){
+		if(type == GL_ZERO) return;
 		if(value == 0 || (((T*)value)[0] == t && ((T*)value)[1] == t2)) return;
 		((T*)value)[0] = t;
 		((T*)value)[1] = t2;
@@ -63,6 +66,7 @@ public:
 	}
 	template<typename T>
 	void set(T t, T t2, T t3){
+		if(type == GL_ZERO) return;
 		if(value == 0 || (((T*)value)[0] == t && ((T*)value)[1] == t2 && ((T*)value)[2] == t3)) return;
 		((T*)value)[0] = t;
 		((T*)value)[1] = t2;
@@ -71,6 +75,7 @@ public:
 	}
 	template<typename T>
 	void set(T t, T t2, T t3, T t4){
+		if(type == GL_ZERO) return;
 		if(value == 0 || (((T*)value)[0] == t && ((T*)value)[1] == t2 && ((T*)value)[2] == t3 && ((T*)value)[3] == t4)) return;
 		((T*)value)[0] = t;
 		((T*)value)[1] = t2;
@@ -96,9 +101,9 @@ public:
 class program{
 	static GLuint bound;
 	static int attribindex;
+	static std::map<std::string, uniform*> uniforms;
 public:
 	const GLuint p;
-	static std::map<std::string, uniform*> uniforms;
 	static uniform* getuniform(std::string s){
 		auto &u = uniforms[s];
 		if(u == 0) u = new uniform();

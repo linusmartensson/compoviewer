@@ -1,8 +1,8 @@
 ﻿{
-	"fullscreen"	: true,
-	"width"			: 1280,
-	"height"		: 720,
+	"fullscreen"	: false,
+	"width"			: 1920,
+	"height"		: 1080,
 	"vsync"			: true,
 	"refreshrate"	: 60,
-	"player"		: "imem"
+	"player"		: "glfw"
 }

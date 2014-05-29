@@ -48,8 +48,8 @@ void core::initGLFonts(){
 	stash = sth_create(1024,1024);
 	if(!(stash && sth_add_font(stash, 0, "resources/DroidSerif-Regular.ttf"))) die();
 	if(!(stash && sth_add_font(stash, 1, "resources/DroidSerif-Italic.ttf"))) die();
-	if(!(stash && sth_add_font(stash, 2, "resources/DreamHack Normal.ttf"))) die();
-	if(!(stash && sth_add_font(stash, 3, "resources/Eurostile LT Medium.ttf"))) die();
+	if(!(stash && sth_add_font(stash, 2, "resources/trade-gothic-bold.ttf"))) die();
+	if(!(stash && sth_add_font(stash, 3, "resources/Topaz-8.ttf"))) die();
 }
 
 void core::readConfig(){
@@ -95,6 +95,8 @@ void core::init(){
 		std::cerr<<"Unable to initialize sound! Maybe already initialized?"<<std::endl;
 		die();
 	}
+	BASS_SetConfig(BASS_CONFIG_UPDATEPERIOD, 1000/60);
+	BASS_SetConfig(BASS_CONFIG_BUFFER, 250);
 	subinit();
 	initGLFonts();
 }

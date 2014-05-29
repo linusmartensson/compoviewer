@@ -25,11 +25,11 @@ struct imagerenderer : public transitionrenderer {
 
 		float bd[] = {   0.f,	0.f,
 						 0.f,   1.f,
-					  1280.f,   0.f,
+					  1.f,   0.f,
 					     1.f,   1.f,
-						 0.f, 720.f,
+						 0.f, 1.f,
 						 0.f,   0.f,
-					  1280.f, 720.f,
+					  1.f, 1.f,
 		                 1.f,   0.f};
 
 		buf = new buffer;
