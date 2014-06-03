@@ -101,7 +101,15 @@ void transitionrenderer::init(){
 			audio = BASS_StreamCreateFile(FALSE,audiotrack.c_str(),0,0,0);
 		else {
 			std::cerr<<"loading tracked music"<<std::endl;
-			audio = modfile = BASS_MusicLoad(FALSE,audiotrack.c_str(),0,0,BASS_MUSIC_PRESCAN|BASS_MUSIC_NOSAMPLE,0);
+			audio = modfile = BASS_MusicLoad(FALSE,audiotrack.c_str(),0,0,BASS_MUSIC_PRESCAN|BASS_MUSIC_NONINTER,0);
+			
+			if(audiotrack.rfind(".mod") != std::string::npos && audiotrack.size()-audiotrack.rfind(".mod") == 4){
+				BASS_ChannelSetAttribute(audio, BASS_ATTRIB_MUSIC_PANSEP, 50);
+				std::cout<<"using 50 stereo sep."<<std::endl;
+			} else {
+				BASS_ChannelSetAttribute(audio, BASS_ATTRIB_MUSIC_PANSEP, 100);
+				std::cout<<"using 100 stereo sep."<<std::endl;
+			}
 
 			struct xmp_module_info mi;
 			int row, pos;
@@ -114,7 +122,7 @@ void transitionrenderer::init(){
 				std::cerr<<"Could not load module XMP"<<std::endl;
 			}
 
-			if (xmp_start_player(ctx, 48000, 0) == 0) {
+			if (xmp_start_player(ctx, 44100, 0) == 0) {
 				xmp_get_module_info(ctx, &mi);
 				modname = mi.mod->name;
 				modtype = mi.mod->type;
@@ -173,65 +181,49 @@ void transitionrenderer::init(){
 			core::die();
 		}
 		audiolength = BASS_ChannelBytes2Seconds(audio, BASS_ChannelGetLength(audio, BASS_POS_BYTE));
-		if(tracked){
+		/*if(tracked){
 			BASS_MusicFree(audio);
-		}
+			audio = 0;
+		}*/
 	} else {
 		audio = 0;
 	}
 	transprogram = subinit();
 }
 
-static int offset = 0;
-DWORD CALLBACK streamproc(HSTREAM handle, void *buffer, DWORD length, void *user){
-	transitionrenderer *tr = (transitionrenderer *)user;
-
-	int ret = 0, count = 0;
-
-	xmp_get_frame_info(tr->ctx, &tr->oldframe);
-	tr->hasModData = true;
-	do{
-		xmp_frame_info frame;
-		xmp_get_frame_info(tr->ctx, &frame);
-	
-		int cpy = min(length-ret, frame.buffer_size-offset);
-
-		
-		memcpy((char*)buffer+ret, (char*)frame.buffer+offset, cpy);
-		ret += cpy;
-
-
-		if(cpy+offset == frame.buffer_size){
-			offset = 0;
-			if(xmp_play_frame(tr->ctx) != 0) return BASS_STREAMPROC_END;
-		} else {
-			offset += cpy;
-		}
-	} while(offset == 0 && count++ < 10);
-	return ret;
-}
-
 int transitionrenderer::operator()(renderer *pr, int width, int height, double localtime, double prevtime, bool first){
 	
-	if(first && audio)
+	if(first && (audio||tracked))
 		play = true;
 
 	if(play && localtime > delay){
 		if(tracked){
-			hasModData = false;
-			offset = 0;
-			xmp_start_player(ctx, 48000, 0);
-			xmp_play_frame(ctx);
-			audio = modfile = BASS_StreamCreate(48000, 2, 0, &streamproc, (void *)this);
+			/*xmp_start_player(ctx, 44100, 0);
+			if(audiotrack.rfind(".mod") != std::string::npos && audiotrack.size()-audiotrack.rfind(".mod") == 4){
+				xmp_set_player(ctx, XMP_PLAYER_MIX, 50);
+				std::cout<<"using 50 stereo sep."<<std::endl;
+			} else {
+				xmp_set_player(ctx, XMP_PLAYER_MIX, 100);
+				std::cout<<"using 100 stereo sep."<<std::endl;
+			}
+			xmp_set_player(ctx, XMP_PLAYER_INTERP, XMP_INTERP_NEAREST);
+			
+			audio = modfile = BASS_StreamCreate(44100, 2, BASS_STREAM_AUTOFREE, &streamproc, (void *)this);
 			BASS_ChannelSetAttribute(audio,BASS_ATTRIB_NOBUFFER,1);
+			*/
+
 		}
 		BASS_ChannelPlay(audio, true);
 		
 		play = false;
 	}
 	
-	if(audio && localtime > audiolength+delay*2.0)
+	if((audio||tracked) && localtime > audiolength+delay*2.0)
 		go = 1;
+
+	if(audio){
+		BASS_ChannelUpdate(audio, 0);
+	}
 
 	int ret = go;
 	go = 0;
@@ -242,12 +234,14 @@ int transitionrenderer::operator()(renderer *pr, int width, int height, double l
 		int r = run(width, height, localtime, first);
 		if(!ret) ret = r;
 	}
-	if(ret && audio){
-		BASS_ChannelStop(audio);
+	if(ret && (audio||tracked)){
+
+		if(audio)
+			BASS_ChannelStop(audio);
+		/*
 		if(tracked){
-			BASS_StreamFree(audio);
 			xmp_restart_module(ctx);
-		}
+		}*/
 		play = false;
 	}
 	if(ret != 0){

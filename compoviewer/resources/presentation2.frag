@@ -20,7 +20,7 @@ void main(void)
 
 	vec2 uv = gl_FragCoord.xy / iResolution.yy;
 	vec2 p = 2.0*uv-1.0;
-	float t = iGlobalTime * 0.02;
+	float t = iGlobalTime * 0.01;
 	p.x *= iResolution.x/iResolution.y;
 	
 
@@ -35,7 +35,7 @@ void main(void)
 	float pos = sqrt(r2.x*r2.x+r2.y*r2.y)-t*3.0;	 
 	float pos2 = sqrt(r2.x*r2.x+r2.y*r2.y)-t*3.0;
 	final = vec3(0.85)-0.1*max(0.0,sign(cos((r.x+r.y+t)*3.14159*10.0)));
-	final = mix(final, vec3(0.15), max(sin(34.0*pos)*cos(3.0*pos2+sin(r2.x*10.0)),0.0));
+	final = mix(final, vec3(0.45), max(sin(34.0*pos)*cos(3.0*pos2+sin(r2.x*10.0)),0.0));
 
 	c = vec4(final,1.0);
 	

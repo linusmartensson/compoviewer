@@ -4,6 +4,7 @@
 #include"../fontstash.h"
 
 #include<bassmod.h>
+#include<iomanip>
 
 struct itemrenderer : public transitionrenderer {
 	program *p;
@@ -80,7 +81,7 @@ struct itemrenderer : public transitionrenderer {
 		return program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("transition2.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders)));
 	}
 	
-	float data[512];
+	float data[8192];
 	
 	int run(int width, int height, double localtime, bool first){
 		
@@ -199,7 +200,7 @@ struct itemrenderer : public transitionrenderer {
 		sth_end_draw(c->stash);
 
 
-		if(tracked && hasModData)
+		if(tracked && audio)
 			drawModText(width, height);
 		
 		return localtime>(audio?60.0*10.0:endtimehint)?1:0;
@@ -207,9 +208,19 @@ struct itemrenderer : public transitionrenderer {
 
 	void drawModText(int width, int height){
 		
-		xmp_frame_info &frame = oldframe;
-		
-		auto pattern = ms[frame.pattern];
+		int pat, row;
+
+		{
+			//xmp_frame_info &frame = oldframe;
+			QWORD p = BASS_ChannelGetPosition(audio, BASS_POS_MUSIC_ORDER);
+			pat = *(BASS_ChannelGetTags(audio, BASS_TAG_MUSIC_ORDERS)+LOWORD(p));
+			row = HIWORD(p);
+		}
+
+		if(pat >= ms.size() || pat < 0) return;
+		if(row >= ms[pat].size() || row < 0) return;
+
+		auto pattern = ms[pat];
 		
 		
 		float lhe = 10*width/1280.f;
@@ -219,52 +230,52 @@ struct itemrenderer : public transitionrenderer {
 	
 		sth_vmetrics(c->stash, 3, lhe, NULL, NULL, &lh);
 
-		int cs = 0, ce = pattern[frame.row].size();
+		int cs = 0, ce = pattern[row].size();
 		int sce = ce;
 
 		float dxo = ce;
 
-		int count = 18;
+		int count = 20;
 
-		if(ce > 13){
+		if(ce > 12){
 
-			if(ce > 26){
+			if(ce > 24){
 				ce /= 4;
 				dxo = ce -cs;
 				count /= 4;
 				count -= 1;
-				drawthis(width, height, dxo, large, pattern, frame.row, cs, ce, height*5.f/16.f, count );
+				drawthis(width, height, dxo, large, pattern, row, cs, ce, height*23.f/32.f, count );
 				
 				cs = ce;
 				ce = sce/2;
 				dxo = ce -cs;
-				drawthis(width, height, dxo, large, pattern, frame.row, cs, ce, height*7.f/16.f, count );
+				drawthis(width, height, dxo, large, pattern, row, cs, ce, height*18.5f/32.f, count );
 				
 				cs = ce;
 				ce = sce*3/4;
 				dxo = ce -cs;
-				drawthis(width, height, dxo, large, pattern, frame.row, cs, ce, height*9.f/16.f, count );
+				drawthis(width, height, dxo, large, pattern, row, cs, ce, height*13.5f/32.f, count );
 				
 				cs = ce;
 				ce = sce;
 				dxo = ce -cs;
-				drawthis(width, height, dxo, large, pattern, frame.row, cs, ce, height*11.f/16.f, count );
+				drawthis(width, height, dxo, large, pattern, row, cs, ce, height*9.f/32.f, count );
 			} else {
 				ce /= 2;
 				dxo = ce-cs;
 				count /= 2;
 				count -= 2;
 
-				drawthis(width, height, dxo, large, pattern, frame.row, cs, ce, height*3.f/8.f, count );
+				drawthis(width, height, dxo, large, pattern, row, cs, ce, height*20.5f/32.f, count );
 
 				cs = ce;
-				ce = pattern[frame.row].size();
+				ce = pattern[row].size();
 				dxo = ce-cs;
 
-				drawthis(width, height, dxo, large, pattern, frame.row, cs, ce, height*5.f/8.f, count  );
+				drawthis(width, height, dxo, large, pattern, row, cs, ce, height*11.5f/32.f, count  );
 			}
 		} else {
-				drawthis(width, height, dxo, large, pattern, frame.row, cs, ce, height/2.0f, count  );
+				drawthis(width, height, dxo, large, pattern, row, cs, ce, height/2.0f, count  );
 		}
 
 		
@@ -276,6 +287,10 @@ struct itemrenderer : public transitionrenderer {
 		dx = sx = width/2.f - 50*width/1280.f*dxo;
 		sth_begin_draw(c->stash);
 		program::getuniform("color")->set(0.98039215686f,0.34901960784f,0.f,1.f);
+		std::ostringstream oss; 
+		oss<<std::setfill('0')<<std::setw(3)<<row;
+		sth_draw_text(c->stash, 3, large, dx, dy, oss.str().c_str(), &dx);
+
 		for(int j=cs;j<ce;++j){
 			sth_draw_text(c->stash, 3, large, dx,dy,pattern[row][j].note.c_str(),&dx);
 			sth_draw_text(c->stash, 3, large, dx,dy,pattern[row][j].params.c_str(),&dx);
@@ -287,7 +302,13 @@ struct itemrenderer : public transitionrenderer {
 		for(int i=row-1,j=0;i>=0&&j<count;--i,++j){
 			dx = sx; 
 			dy += lh;
+
+			std::ostringstream oss; 
+			oss<<std::setfill('0')<<std::setw(3)<<i;
+			sth_draw_text(c->stash, 3, large, dx, dy, oss.str().c_str(), &dx);
+
 			for(int j=cs;j<ce;++j){
+				
 				sth_draw_text(c->stash, 3, large, dx,dy,pattern[i][j].note.c_str(),&dx);
 				sth_draw_text(c->stash, 3, large, dx,dy,pattern[i][j].params.c_str(),&dx);
 				dx += 10.0;
@@ -297,6 +318,10 @@ struct itemrenderer : public transitionrenderer {
 		for(int i=row+1,j=0;i<pattern.size()&&j<count;++i,++j){
 			dx = sx; 
 			dy -= lh;
+			std::ostringstream oss; 
+			oss<<std::setfill('0')<<std::setw(3)<<i;
+			sth_draw_text(c->stash, 3, large, dx, dy, oss.str().c_str(), &dx);
+
 			for(int j=cs;j<ce;++j){
 				sth_draw_text(c->stash, 3, large, dx,dy,pattern[i][j].note.c_str(),&dx);
 				sth_draw_text(c->stash, 3, large, dx,dy,pattern[i][j].params.c_str(),&dx);

@@ -195,6 +195,10 @@ struct renderer_end : public transitionrenderer {
 		program::getuniform("color")->set(0.98039215686f,0.34901960784f,0.0f,(float)localtime);
 		sth_begin_draw(c->stash);
 		sth_draw_text(c->stash, 2,250, dx,dy,title.c_str(),&dx);
+		sth_vmetrics(c->stash, 2, 250, NULL, NULL, &lh);
+		dy -= 1.5*lh;
+		dx = sx+600;
+		sth_draw_text(c->stash, 2,100, dx,dy,"Don't forget to vote at vote.birdie.org!",&dx);
 		sth_end_draw(c->stash);
 
 		return localtime>endtimehint?1:0;
@@ -235,8 +239,15 @@ int main(int argc, char* argv[]){
 
 	c->init();
 
+	std::string entryfile = "entries.json";
+
+	if(argc > 1){
+		entryfile = argv[1];
+	}
+
+
 	renderer_end *e = 0;
-	JSONValue *efile = JSON::Parse(core::getfile("entries.json").c_str());
+	JSONValue *efile = JSON::Parse(core::getfile(entryfile).c_str());
 	auto compos= efile->AsArray();
 	transitionrenderer *r = 0;
 
@@ -246,9 +257,9 @@ int main(int argc, char* argv[]){
 		previous = "";
 		auto rs = new renderer_start;
 		
-		rs->audiotrack = "";
-		if(rs->audiotrack == "") rs->endtimehint = 25.0; else rs->endtimehint = 500.0;
-		rs->delay = 0.5f;
+		rs->audiotrack = "resources/birdie_chippis.mp3";
+		if(rs->audiotrack == "") rs->endtimehint = 10.0; else rs->endtimehint = 500.0;
+		rs->delay = 2.0f;
 		
 		int category = (int)compo->Child(L"category")->AsNumber();
 		
@@ -290,7 +301,7 @@ int main(int argc, char* argv[]){
 		
 			pr->setup(c, (r = ir));
 		
-			if(pr->audio)
+			if(pr->audio || pr->tracked)
 				compolength+=pr->audiolength+pr->delay*2.0;
 			else{
 				compolength+=pr->endtimehint;
@@ -338,7 +349,12 @@ int main(int argc, char* argv[]){
 
 				//Render wild
 				auto br = new videorenderer;
+				
 				br->filename = "submissions/"+wctos(v, L"filename");
+				if(br->filename.find("://") != std::string::npos){
+					br->filename = wctos(v, L"filename");
+					br->endtimehint = 100.0;
+				}
 				br->delay = 1.0;
 				ir->setup(c, (r = br));
 				ir = new itemrenderer;
@@ -384,6 +400,8 @@ int main(int argc, char* argv[]){
 		std::cout<<rs->title<<" compo length: "<<compolength/60.f<<std::endl;
 		
 		e->title = wctos(compo, L"compo");
+		e->audiotrack = "resources/birdie_chippis.mp3";
+		e->delay = 2.0;
 
 		totallength += compolength;
 	});	
@@ -391,7 +409,7 @@ int main(int argc, char* argv[]){
 
 	r->setup(c,e->setup(c, (new renderer_shutdown)->setup(c,0)));
 	
-	e->endtimehint = 1000000.0;
+	e->endtimehint = 20.0;
 
 	std::cout<<"Minutes:"<<totallength/60.f<<std::endl;
 

@@ -1,9 +1,12 @@
+#define _GLFW_USE_DWM_SWAP_INTERVAL 1
+
 #include"glfwcore.h"
 #include"fontstash.h"
 #include"renderer.h"
 
 #define GLEW_STATIC
 #include<GL/glew.h>
+#include<GL/wglew.h>
 #include<GLFW/glfw3.h>
 
 #include<iostream>
@@ -54,8 +57,9 @@ void glfwcore::subinit() {
 	glfwMakeContextCurrent(w);
 	if(!fullscreen)
 		glfwSetWindowPos(w, (s->width-width)/2, (s->height-height)/2);
-	else
-		glfwSwapInterval(vsync?1:0);
+	
+	
+	glfwSwapInterval(1);
 
 	glewExperimental = true;
 	if(glewInit() != GL_NO_ERROR) exit(1);
@@ -66,5 +70,6 @@ bool glfwcore::dying(){
 }
 void glfwcore::swapBuffers(){
 	glfwSwapBuffers(w);
+	glFinish();
 	glfwPollEvents();
 }

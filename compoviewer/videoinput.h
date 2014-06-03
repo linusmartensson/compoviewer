@@ -36,7 +36,11 @@ public:
 			core::die();
 		}
 
-		media = libvlc_media_new_path(libvlc, filename.c_str());
+		if(filename.find("://") != std::string::npos)
+			media = libvlc_media_new_location(libvlc, filename.c_str());
+		else
+			media = libvlc_media_new_path(libvlc, filename.c_str());
+		
 		if(media == 0){
 			std::cerr<<"Could not load video file "<<filename<<"!"<<std::endl;
 			core::die();
@@ -53,6 +57,9 @@ public:
 		libvlc_media_parse(media);
 
 		length = libvlc_media_get_duration(media);
+		if(length == 0){
+			length = 1000*10000;
+		}
 		std::cout<<"Video length in ms: "<<length<<std::endl;
 		
 
