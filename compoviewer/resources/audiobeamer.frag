@@ -9,6 +9,8 @@ uniform sampler2D logo;
 uniform vec2 logores;
 uniform vec4 audiolevel;
 
+uniform int category;
+
 out vec4 c;
 
 
@@ -258,8 +260,13 @@ vec3 ipo=pos;
 	float sn = snoise(vec3(iGlobalTime*0.1, pos.x,length(pos.yz)));
 	sn *= -sn;
 
-	float z = min(length(pos.yz*1.2)-audiolevel.x*1.25, 
-			   sn*5.0+5.0-audiolevel.x*3.0 + dot(pos.yz,pos.yz)*0.1/(1.0+audiolevel.x*1.0));
+	float al = audiolevel.x;
+	if(category != 1 && category != 5){
+		al = 1.0;
+	}
+
+	float z = min(length(pos.yz*1.2)-al*1.25, 
+			   sn*5.0+5.0-al*3.0 + dot(pos.yz,pos.yz)*0.1/(1.0+al*1.0));
 
 
 	return z;
@@ -336,9 +343,7 @@ void main(void)
 	int i=0;
 	for(;i<32;++i){
 		float m = (df(o+d*s));
-		if(m < 5.0){
 			near_collision(o+d*(s), final, m);
-		}
 		s += 0.2;
 	}
 

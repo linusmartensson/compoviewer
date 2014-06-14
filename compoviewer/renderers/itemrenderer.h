@@ -12,7 +12,7 @@ struct itemrenderer : public transitionrenderer {
 	varray *arr;
 	std::string artist, group, title, description;
 	float sx, sy, dx, dy, lh;
-	int count;
+	int count, category;
 	texture *texttexture;
 
 	fsshader *fss;
@@ -92,6 +92,7 @@ struct itemrenderer : public transitionrenderer {
 		
 		
 		program::getuniform("audiolevel")->set(0.f,0.f,0.f,0.f);
+		program::getuniform("category")->set((int)category);
 		if(audio){
 			
 			if(first) {

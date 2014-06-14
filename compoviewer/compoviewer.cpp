@@ -298,6 +298,7 @@ int main(int argc, char* argv[]){
 			ir->description = wctos(v, L"description");
 			ir->previous = previous;
 			ir->sponsor_file = sponsor_file;
+			ir->category = category;
 		
 			pr->setup(c, (r = ir));
 		
@@ -316,6 +317,7 @@ int main(int argc, char* argv[]){
 				ir->setup(c, (r = br));
 
 				ir = new itemrenderer;
+				ir->category = category;
 				ir->pos = pos;
 				ir->artist = wctos(v, L"artist");
 				ir->group = wctos(v, L"group");
@@ -335,6 +337,7 @@ int main(int argc, char* argv[]){
 				ir->setup(c, (r = br));
 			
 				ir = new itemrenderer;
+				ir->category = category;
 				ir->pos = pos;
 				ir->artist = wctos(v, L"artist");
 				ir->group = wctos(v, L"group");
@@ -358,6 +361,7 @@ int main(int argc, char* argv[]){
 				br->delay = 5.0;
 				ir->setup(c, (r = br));
 				ir = new itemrenderer;
+				ir->category = category;
 				ir->pos = pos;
 				ir->artist = wctos(v, L"artist");
 				ir->group = wctos(v, L"group");
