@@ -171,7 +171,7 @@ struct itemrenderer : public transitionrenderer {
 		dy -= lh*1.0f;
 		sth_draw_text(c->stash, 2,100, dx,dy,title.c_str(),&dx);
 
-		dx = width - 100*width/1280.f;
+		dx = width - 150*width/1280.f;
 		sth_draw_text(c->stash, 2, 100, dx,dy,number.c_str(),&dx);
 
 		sth_vmetrics(c->stash, 2, 50, NULL, NULL, &lh);

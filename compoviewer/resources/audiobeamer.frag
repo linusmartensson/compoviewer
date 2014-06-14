@@ -265,6 +265,8 @@ vec3 ipo=pos;
 	return z;
 }
 
+float volume;
+
 void near_collision(in vec3 pos, inout vec3 color, in float im){
 
 	float mm = clamp(1.0-(max(im,0.0)+1.0)*0.1,0.0,1.0);
@@ -326,7 +328,7 @@ void main(void)
 
 	float s = 1.0;
 
-	float volume = texture2D(iChannel0, vec2(0.5,(rp.x-a*0.01)*0.5+0.3)).r;
+	volume = texture2D(iChannel0, vec2(0.5,(rp.x-a*0.01)*0.5+0.3)).r;
 
 	final.rgb += clamp(pow(sin(rp.x*320.0*1.0)+0.01,115.0),0.0,1.0)*0.1;
 	final.rgb += clamp(pow(sin(rrp.y*120.0*1.0)+0.01,115.0),0.0,1.0)*0.1;
@@ -343,7 +345,7 @@ void main(void)
 
 	final = mix(final, vec3(1.0), clamp(1.0-distance(final, vec3(0.0)),0.0,1.0));
 
-	final = mix(final, clamp(vec3(volume*14.0*clamp(1.0-distance(rrp.y+a*0.1,0.5)*(10.0-volume*20.0),0.0,1.0)),vec3(0.0),vec3(1.0)), clamp(min(audiolevel.z*0.1,1.0)-distance(rrp.y+a*0.1,0.5)*2.0,0.0,1.0));
+	final = mix(final, vec3(1.0,0.7,0.3)*3.0*clamp(vec3(volume*14.0*clamp(1.0-distance(rrp.y+a*0.1,0.5)*(10.0-volume*20.0),0.0,1.0)),vec3(0.0),vec3(1.0)), clamp(min(audiolevel.z*0.1,1.0)-distance(rrp.y+a*0.1,0.5)*2.0,0.0,8.0));
 
 	//final = ahsv2rgb(vec3(audiolevel.z*0.005+final.r*audiolevel.x*0.1, (final.r+final.g+final.b)*0.5,(final.r+final.g+final.b)*0.3))*1.0;
 

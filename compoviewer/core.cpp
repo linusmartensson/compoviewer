@@ -48,7 +48,7 @@ void core::initGLFonts(){
 	stash = sth_create(2048,2048);
 	if(!(stash && sth_add_font(stash, 0, "resources/DroidSerif-Regular.ttf"))) die();
 	if(!(stash && sth_add_font(stash, 1, "resources/DroidSerif-Italic.ttf"))) die();
-	if(!(stash && sth_add_font(stash, 2, "resources/trade-gothic-bold.ttf"))) die();
+	if(!(stash && sth_add_font(stash, 2, "resources/Eurostile LT Medium.ttf"))) die();
 	if(!(stash && sth_add_font(stash, 3, "resources/Topaz-8.ttf"))) die();
 }
 

@@ -121,7 +121,7 @@ struct renderer_start : public transitionrenderer{
 		
 		program::getuniform("color")->set(0.98039215686f,0.34901960784f,0.0f,(float)localtime-3.0f);
 		sth_begin_draw(c->stash);
-		sth_draw_text(c->stash, 2,250, dx,dy,title.c_str(),&dx);
+		sth_draw_text(c->stash, 2,200, dx,dy,title.c_str(),&dx);
 		sth_end_draw(c->stash);
 
 		return localtime>endtimehint?1:0;
