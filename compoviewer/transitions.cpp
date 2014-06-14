@@ -220,10 +220,10 @@ int transitionrenderer::operator()(renderer *pr, int width, int height, double l
 	
 	if((audio||tracked) && localtime > audiolength+delay*2.0)
 		go = 1;
-
+	/*
 	if(audio){
 		BASS_ChannelUpdate(audio, 0);
-	}
+	}*/
 
 	int ret = go;
 	go = 0;

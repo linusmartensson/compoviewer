@@ -355,7 +355,7 @@ int main(int argc, char* argv[]){
 					br->filename = wctos(v, L"filename");
 					br->endtimehint = 100.0;
 				}
-				br->delay = 1.0;
+				br->delay = 5.0;
 				ir->setup(c, (r = br));
 				ir = new itemrenderer;
 				ir->pos = pos;
@@ -375,13 +375,13 @@ int main(int argc, char* argv[]){
 				ir->audiotrack = "submissions/"+wctos(v, L"filename");
 				ir->tracked = false;
 				
-				ir->delay = 2.0;
+				ir->delay = 5.0;
 			} else if(category == core::CATEGORY_TRACKED_AUDIO){
 
 				//Render audio
 				ir->audiotrack = "submissions/"+wctos(v, L"filename");
 				ir->tracked = true;
-				ir->delay = 2.0;
+				ir->delay = 5.0;
 			}
 			
 			std::ostringstream oss;

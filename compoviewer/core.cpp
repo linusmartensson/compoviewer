@@ -94,10 +94,10 @@ void core::init(){
 	if(!BASS_Init(-1,48000,BASS_DEVICE_SPEAKERS,0,0)){
 		std::cerr<<"Unable to initialize sound! Maybe already initialized?"<<std::endl;
 		die();
-	}
+	}/*
 	BASS_SetConfig(BASS_CONFIG_UPDATEPERIOD, 1000/60);
 	BASS_SetConfig(BASS_CONFIG_BUFFER, 120);
-	BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 0);
+	BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 0);*/
 	subinit();
 	initGLFonts();
 }

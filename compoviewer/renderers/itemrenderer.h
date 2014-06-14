@@ -122,8 +122,8 @@ struct itemrenderer : public transitionrenderer {
 			if(level != -1){
 				ldata[0] = ldata[0]*0.97f>LOWORD(level)/32768.f?ldata[0]*0.97f:LOWORD(level)/32768.f;
 				ldata[1] = ldata[1]*0.97f>HIWORD(level)/32768.f?ldata[1]*0.97f:HIWORD(level)/32768.f;
-				lsdata[0] += ldata[0];
-				lsdata[1] += ldata[1];
+				lsdata[0] += ldata[0]*ldata[0];
+				lsdata[1] += ldata[1]*ldata[1];
 
 				program::getuniform("audiolevel")->set(ldata[0],ldata[1],lsdata[0],lsdata[1]);
 			}
