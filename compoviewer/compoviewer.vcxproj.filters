@@ -140,5 +140,6 @@
     <None Include="resources\config.json" />
     <None Include="resources\test.frag" />
     <None Include="resources\temp\entries.json" />
+    <None Include="resources\distshader.frag" />
   </ItemGroup>
 </Project>

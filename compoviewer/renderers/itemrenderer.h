@@ -1,3 +1,11 @@
+/*
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <spline@secretweb.org> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return Linus Mårtensson
+ * ----------------------------------------------------------------------------
+ */
 #pragma once
 #include"../transitions.h"
 #include"../core.h"
@@ -43,7 +51,7 @@ struct itemrenderer : public transitionrenderer {
 		fss = new fsshader(program::createProgram(program::shader(GL_FRAGMENT_SHADER, core::getfile("audiobeamer.frag"), program::shader(GL_VERTEX_SHADER, core::getfile("transition_test.vert"), shaders))));
 		audiotex = new texture;
 		audiostex = new texture;
-		logo = texture::load("resources/logo.png");
+		logo = texture::load("resources/dice-logotype-black.png");
 		
 		memset(idata, 0.f, sizeof(idata));
 		memset(sdata, 0.f, sizeof(sdata));
@@ -154,7 +162,7 @@ struct itemrenderer : public transitionrenderer {
 		fss->run();
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		dx = sx = 50; 
+		dx = sx = 50*height/1080.0; 
 		dy = sy = height;
 		
 		program::getuniform("time")->set((float)localtime);
@@ -166,29 +174,29 @@ struct itemrenderer : public transitionrenderer {
 			arr->update();
 			glDrawArrays(GL_TRIANGLES, 0, c->stash->nverts);
 		};
-		program::getuniform("color")->set(0.98039215686f,0.34901960784f,0.f,1.f);
+		program::getuniform("color")->set(0.0f,0.0f,0.f,1.f);
 		sth_begin_draw(c->stash);
-		sth_vmetrics(c->stash, 2, 100, NULL, NULL, &lh);
+		sth_vmetrics(c->stash, 2, 100*height/1080.0, NULL, NULL, &lh);
 		dy -= lh*1.0f;
-		sth_draw_text(c->stash, 2,100, dx,dy,title.c_str(),&dx);
+		sth_draw_text(c->stash, 2,100*height/1080.0, dx,dy,title.c_str(),&dx);
 
 		dx = width - 150*width/1280.f;
-		sth_draw_text(c->stash, 2, 100, dx,dy,number.c_str(),&dx);
+		sth_draw_text(c->stash, 2, 100*height/1080.0, dx,dy,number.c_str(),&dx);
 
-		sth_vmetrics(c->stash, 2, 50, NULL, NULL, &lh);
+		sth_vmetrics(c->stash, 2, 50*height/1080.0, NULL, NULL, &lh);
 		dy -= lh*1.0f;
 		dx = sx;
-		sth_draw_text(c->stash, 2,50, dx,dy,artist.c_str(),&dx);
-		sth_draw_text(c->stash, 2,50, dx,dy,"^",&dx);
-		sth_draw_text(c->stash, 2,50, dx,dy,group.c_str(),&dx);
+		sth_draw_text(c->stash, 2,50*height/1080.0, dx,dy,artist.c_str(),&dx);
+		sth_draw_text(c->stash, 2,50*height/1080.0, dx,dy,"^",&dx);
+		sth_draw_text(c->stash, 2,50*height/1080.0, dx,dy,group.c_str(),&dx);
 		std::istringstream iss(description);
-		sth_vmetrics(c->stash, 2, 35, NULL, NULL, &lh);
+		sth_vmetrics(c->stash, 2, 35*height/1080.0, NULL, NULL, &lh);
 		char str[2048];
-		dy = 200;
+		dy = 200*height/1080.0;
 		dy -= lh*1.5f;
 		dx = sx;
 		while(iss.getline(str, 2048)){
-			sth_draw_text(c->stash, 2,35, dx,dy,str,&dx);
+			sth_draw_text(c->stash, 2,35*height/1080.0, dx,dy,str,&dx);
 			dy -= lh*0.75f;
 			dx = sx;
 		}
@@ -196,7 +204,7 @@ struct itemrenderer : public transitionrenderer {
 		dx = sx;
 		dy = 50;
 		
-		sth_draw_text(c->stash, 2,35, dx,dy,previous.c_str(),&dx);
+		sth_draw_text(c->stash, 2,35*height/1080.0, dx,dy,previous.c_str(),&dx);
 
 		sth_end_draw(c->stash);
 
